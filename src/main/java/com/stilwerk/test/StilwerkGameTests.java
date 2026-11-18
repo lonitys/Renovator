@@ -10,6 +10,8 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 @PrefixGameTestTemplate(false)
 public final class StilwerkGameTests {
     static final String T = "empty";
+    /** Relative y of the template's stone floor; build from FLOOR + 1. */
+    static final int FLOOR = 1;
 
     @GameTest(template = T)
     public static void smoke(GameTestHelper h) {

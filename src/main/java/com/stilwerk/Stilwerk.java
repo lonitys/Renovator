@@ -1,6 +1,9 @@
 package com.stilwerk;
 
+import com.stilwerk.config.ClientConfig;
+import com.stilwerk.config.ServerConfig;
 import com.stilwerk.item.ArchitectWandItem;
+import net.neoforged.fml.config.ModConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
@@ -23,6 +26,8 @@ public final class Stilwerk {
     public Stilwerk(IEventBus modBus, ModContainer container) {
         ITEMS.register(modBus);
         modBus.addListener(Stilwerk::creativeTab);
+        container.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
+        container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
     }
 
     public static ResourceLocation id(String path) {

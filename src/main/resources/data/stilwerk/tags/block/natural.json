@@ -1,0 +1,15 @@
+{
+  "values": [
+    "#minecraft:dirt", "#minecraft:sand", "#minecraft:base_stone_overworld", "#minecraft:base_stone_nether",
+    "minecraft:end_stone", { "id": "#c:ores", "required": false }, "#minecraft:flowers", "#minecraft:saplings",
+    "#minecraft:replaceable", "#minecraft:ice", "#minecraft:snow", "#minecraft:wart_blocks",
+    "minecraft:gravel", "minecraft:clay", "minecraft:water", "minecraft:lava", "minecraft:bedrock",
+    "minecraft:grass_block", "minecraft:mycelium", "minecraft:podzol", "minecraft:mud", "minecraft:moss_block",
+    "minecraft:sugar_cane", "minecraft:cactus", "minecraft:kelp", "minecraft:kelp_plant", "minecraft:seagrass",
+    "minecraft:tall_seagrass", "minecraft:vine", "minecraft:pointed_dripstone", "minecraft:dripstone_block",
+    "minecraft:amethyst_block", "minecraft:budding_amethyst", "minecraft:obsidian", "minecraft:magma_block",
+    "minecraft:soul_sand", "minecraft:soul_soil", "minecraft:crimson_nylium", "minecraft:warped_nylium",
+    "minecraft:mushroom_stem", "minecraft:red_mushroom_block", "minecraft:brown_mushroom_block",
+    "minecraft:shroomlight", "minecraft:glow_lichen", "minecraft:sculk", "minecraft:sculk_vein"
+  ]
+}

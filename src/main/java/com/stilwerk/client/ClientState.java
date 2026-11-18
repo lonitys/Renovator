@@ -18,7 +18,8 @@ public final class ClientState {
     private ClientState() {}
 
     /** Largest selection the client resolves for previews and censuses. */
-    public static final int CLIENT_LIMIT = 200_000;
+    /** Client-side resolving has no block limit (the server applies its own, unlimited by default). */
+    public static final int CLIENT_LIMIT = Integer.MAX_VALUE;
 
     public static WandMode mode = WandMode.SELECT;
     public static @Nullable BlockPos cornerA, cornerB;

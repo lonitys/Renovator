@@ -1,6 +1,7 @@
 package com.stilwerk.test;
 
 import com.stilwerk.Stilwerk;
+import com.stilwerk.interior.FurnitureChoice;
 import com.stilwerk.interior.InteriorGenerator;
 import com.stilwerk.interior.ModuleLibrary;
 import com.stilwerk.interior.Room;
@@ -60,6 +61,34 @@ public final class InteriorModTests {
         boolean mcw = ModList.get().isLoaded("mcwfurnitures"), rf = ModList.get().isLoaded("refurbished_furniture");
         int expected = mcw && rf ? 60 : !mcw && !rf ? 32 : total;
         h.assertTrue(total == expected, "modules loaded " + total + ", expected " + expected);
+        h.succeed();
+    }
+
+    static java.util.Set<String> namespaces(InteriorGenerator.Result r) {
+        java.util.Set<String> out = new java.util.TreeSet<>();
+        for (var c : r.changes().changes()) out.add(BuiltInRegistries.BLOCK.getKey(c.newState().getBlock()).getNamespace());
+        return out;
+    }
+
+    @GameTest(template = T)
+    public static void furnitureChoiceIsRespected(GameTestHelper h) {
+        InteriorTests.room(h, 9, 9, 4);
+        Room room = InteriorTests.detect(h);
+        java.util.List<String> options = FurnitureChoice.options();
+        h.assertTrue(options.get(options.size() - 1).equals(FurnitureChoice.VANILLA), "vanilla is always offered: " + options);
+        for (String type : new String[]{"bedroom", "kitchen", "living", "dining", "bath"}) {
+            var vanilla = InteriorGenerator.generate(h.getLevel(), room, ModuleLibrary.type(type), 3, InteriorTests.wood("spruce"), FurnitureChoice.VANILLA);
+            h.assertTrue(namespaces(vanilla).equals(java.util.Set.of("minecraft")), type + " vanilla only, got " + namespaces(vanilla));
+            h.assertFalse(vanilla.placed().stream().filter(id -> !id.equals("rug") && !id.equals("light")).toList().isEmpty(), type + " still furnished");
+            for (String mod : options) {
+                if (mod.equals(FurnitureChoice.VANILLA) || mod.equals(FurnitureChoice.MODS)) continue;
+                var only = InteriorGenerator.generate(h.getLevel(), room, ModuleLibrary.type(type), 3, InteriorTests.wood("spruce"), mod);
+                java.util.Set<String> ns = namespaces(only);
+                ns.remove("minecraft");
+                h.assertTrue(ns.isEmpty() || ns.equals(java.util.Set.of(mod)), type + " with " + mod + " uses " + ns);
+            }
+        }
+        h.assertTrue(FurnitureChoice.normalize("not_a_mod").equals(options.get(0)), "unknown choice falls back to the default");
         h.succeed();
     }
 }

@@ -1,5 +1,6 @@
-"""Writes src/main/resources/data/stilwerk/structure/empty.nbt:
-a 16x16x16 GameTest structure with a stone floor at y=0 and air above."""
+"""Writes the GameTest structures:
+- empty.nbt: 16x16x16, a stone floor at y=0 and air above;
+- village.nbt: 40x16x40 terrain, stone y=0, dirt y=1..2, grass y=3 (relative test y 4) and air above."""
 import gzip
 import struct
 import sys
@@ -28,17 +29,18 @@ def compound_payload(entries):
     return out + struct.pack(">b", TAG_END)
 
 
-def main(out_path):
-    size = 16
+def write(out_path, sx, sy, sz, layers):
+    """layers: block names from y=0 upwards; everything above is air."""
     blocks = []
-    for x in range(size):
-        for z in range(size):
-            pos = list_payload(TAG_INT, [int_payload(x), int_payload(0), int_payload(z)])
-            blocks.append(compound_payload([(TAG_LIST, "pos", pos), (TAG_INT, "state", int_payload(0))]))
-    palette = [compound_payload([(TAG_STRING, "Name", name("minecraft:stone"))])]
+    for y, _ in enumerate(layers):
+        for x in range(sx):
+            for z in range(sz):
+                pos = list_payload(TAG_INT, [int_payload(x), int_payload(y), int_payload(z)])
+                blocks.append(compound_payload([(TAG_LIST, "pos", pos), (TAG_INT, "state", int_payload(y))]))
+    palette = [compound_payload([(TAG_STRING, "Name", name(b))]) for b in layers]
     root = compound_payload([
         (TAG_INT, "DataVersion", int_payload(DATA_VERSION)),
-        (TAG_LIST, "size", list_payload(TAG_INT, [int_payload(size)] * 3)),
+        (TAG_LIST, "size", list_payload(TAG_INT, [int_payload(sx), int_payload(sy), int_payload(sz)])),
         (TAG_LIST, "palette", list_payload(TAG_COMPOUND, palette)),
         (TAG_LIST, "blocks", list_payload(TAG_COMPOUND, blocks)),
         (TAG_LIST, "entities", list_payload(TAG_END, [])),
@@ -50,5 +52,10 @@ def main(out_path):
     print(f"wrote {out_path} ({len(data)} bytes uncompressed)")
 
 
+def main(out_dir):
+    write(f"{out_dir}/empty.nbt", 16, 16, 16, ["minecraft:stone"])
+    write(f"{out_dir}/village.nbt", 40, 16, 40, ["minecraft:stone", "minecraft:dirt", "minecraft:dirt", "minecraft:grass_block"])
+
+
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "src/main/resources/data/stilwerk/structure/empty.nbt")
+    main(sys.argv[1] if len(sys.argv) > 1 else "src/main/resources/data/stilwerk/structure")

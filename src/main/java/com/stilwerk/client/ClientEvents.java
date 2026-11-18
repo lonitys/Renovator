@@ -75,9 +75,10 @@ public final class ClientEvents {
             while (Keys.TOGGLE_PREVIEW.consumeClick()) {
                 if (!wand) continue;
                 if (PreviewController.active()) PreviewController.toggleBeforeAfter();
+                else if (InteriorController.active()) InteriorController.cycleFurniture();
                 else PlacementController.toggleGhost();
             }
-            // arrows: details → previous/next and variant; interior → room type and reroll; placement → rotate/mirror
+            // arrows: details → previous/next and variant; interior → room type, reroll and (↓) furniture; placement → rotate/mirror
             while (Keys.ROTATE_LEFT.consumeClick()) {
                 if (!wand) continue;
                 if (DetailController.active()) DetailController.next(-1);

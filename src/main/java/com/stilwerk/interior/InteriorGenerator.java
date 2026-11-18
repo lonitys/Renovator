@@ -94,15 +94,22 @@ public final class InteriorGenerator {
         }
     }
 
+    /** Furnishes with the default furniture choice (all installed furniture mods). */
     public static Result generate(BlockGetter level, Room room, RoomType type, long seed, Family wood) {
+        return generate(level, room, type, seed, wood, FurnitureChoice.normalize(FurnitureChoice.MODS));
+    }
+
+    /** @param furniture a {@link FurnitureChoice}: all mods, one furniture mod, or vanilla only */
+    public static Result generate(BlockGetter level, Room room, RoomType type, long seed, Family wood, String furniture) {
+        String choice = FurnitureChoice.normalize(furniture);
         State st = new State(level, room, seed, wood);
         List<RoomType.Slot> slots = new ArrayList<>(type.slots());
         slots.sort(Comparator.comparingInt(RoomType.Slot::priority).reversed());
         for (int si = 0; si < slots.size(); si++) {
             RoomType.Slot slot = slots.get(si);
-            List<Module> all = ModuleLibrary.available(slot.category());
+            List<Module> all = ModuleLibrary.available(slot.category()).stream().filter(m -> FurnitureChoice.allowed(m, choice)).toList();
             if (all.isEmpty()) continue;
-            List<Module> pool = all.stream().filter(Module::modded).toList();
+            List<Module> pool = all.stream().filter(m -> FurnitureChoice.preferred(m, choice)).toList();
             if (pool.isEmpty()) pool = all;
             int span = slot.max() - slot.min() + 1;
             int count = slot.min() + (int) Math.floorMod(Hash.mix(seed + 977L * si), (long) span);

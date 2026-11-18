@@ -23,8 +23,8 @@ public final class UploadBuffer {
     private UploadBuffer() {}
 
     /** Cells (including VOID) an uploaded blueprint may span. */
-    public static final long MAX_VOLUME = 16_000_000L;
-    private static final int KEEP = 4;
+    public static final long MAX_VOLUME = 64_000_000L;
+    private static final int KEEP = 2;
 
     private static final class Partial {
         final int uploadId, total;

@@ -20,7 +20,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-/** The blueprint folder ({@code <game dir>/stilwerk/bauplaene}): our .nbt files plus any imported schematics. */
+/** The blueprint folder ({@code <game dir>/stilwerk/blueprints}): our .nbt files plus any imported schematics. */
 public final class ClientLibrary {
     private ClientLibrary() {}
 
@@ -36,7 +36,7 @@ public final class ClientLibrary {
     private static final Map<Path, Entry> CACHE = new HashMap<>();
 
     public static Path dir() {
-        Path d = Minecraft.getInstance().gameDirectory.toPath().resolve("stilwerk").resolve("bauplaene");
+        Path d = com.stilwerk.config.Folders.resolve(Minecraft.getInstance().gameDirectory.toPath().resolve("stilwerk"), "blueprints", "bauplaene");
         try {
             Files.createDirectories(d);
         } catch (IOException e) {

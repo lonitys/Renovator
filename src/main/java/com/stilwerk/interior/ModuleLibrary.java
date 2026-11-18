@@ -100,12 +100,4 @@ public final class ModuleLibrary {
         for (RoomType t : types()) if (t.id().equals(id)) return t;
         return types().get(0);
     }
-
-    /** Which furniture mods are in use. */
-    public static List<String> furnitureMods() {
-        List<String> out = new ArrayList<>();
-        if (ModList.get().isLoaded("mcwfurnitures")) out.add("Macaw's Furniture");
-        if (ModList.get().isLoaded("refurbished_furniture")) out.add("Refurbished Furniture");
-        return out;
-    }
 }

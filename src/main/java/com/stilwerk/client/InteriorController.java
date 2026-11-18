@@ -4,6 +4,7 @@ import com.stilwerk.client.screen.InteriorScreen;
 import com.stilwerk.config.ClientConfig;
 import com.stilwerk.core.Change;
 import com.stilwerk.family.Family;
+import com.stilwerk.interior.FurnitureChoice;
 import com.stilwerk.interior.InteriorGenerator;
 import com.stilwerk.interior.ModuleLibrary;
 import com.stilwerk.interior.Room;
@@ -23,7 +24,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
-/** Interior preview: room detected on the client, furnished with a type and seed; ↑ reroll, ←/→ type, Enter, Esc. */
+/** Interior preview: room detected on the client, furnished with a type and seed; ↑ reroll, ←/→ type, ↓ furniture, Enter, Esc. */
 public final class InteriorController {
     private InteriorController() {}
 
@@ -84,6 +85,17 @@ public final class InteriorController {
         regenerate();
     }
 
+    /** The furniture choice in use (remembered in the client config). */
+    public static String furniture() {
+        return FurnitureChoice.normalize(ClientConfig.interiorFurniture());
+    }
+
+    /** Next furniture choice (all mods, one mod, vanilla only); refreshes a running preview. */
+    public static void cycleFurniture() {
+        ClientConfig.setInteriorFurniture(FurnitureChoice.next(furniture()));
+        if (previewing) regenerate();
+    }
+
     public static void nextType(int d) {
         if (!previewing) return;
         typeIndex = Math.floorMod(typeIndex + d, ModuleLibrary.types().size());
@@ -98,19 +110,20 @@ public final class InteriorController {
         Minecraft mc = Minecraft.getInstance();
         if (mesh != null) mesh.close();
         mesh = null;
-        InteriorGenerator.Result r = InteriorGenerator.generate(mc.level, room, type(), seed, wood);
+        InteriorGenerator.Result r = InteriorGenerator.generate(mc.level, room, type(), seed, wood, furniture());
         List<Change> changes = r.changes().changes();
         anchor = room.start();
         List<GhostMesh.Block> blocks = new ArrayList<>(changes.size());
         for (Change c : changes) blocks.add(new GhostMesh.Block(c.pos().subtract(anchor), c.newState()));
         mesh = GhostMesh.build(mc.level, anchor, blocks, Math.max(0.8f, ClientConfig.ghostAlpha()), ClientConfig.maxGhostBlocks());
         long groups = r.placed().stream().filter(id -> !id.equals("rug") && !id.equals("light")).count();
-        ClientState.actionbar(Component.translatable("stilwerk.interior.hint", Component.translatable(type().translationKey()), groups));
+        ClientState.actionbar(Component.translatable("stilwerk.interior.hint", Component.translatable(type().translationKey()), groups,
+                FurnitureChoice.label(furniture())));
     }
 
     public static void confirm() {
         if (!previewing) return;
-        PacketDistributor.sendToServer(new InteriorRequest(ClientState.nextRequestId(), clicked, face, type().id(), seed, false));
+        PacketDistributor.sendToServer(new InteriorRequest(ClientState.nextRequestId(), clicked, face, type().id(), seed, furniture(), false));
         ClientState.actionbar(Component.translatable("stilwerk.interior.placed", Component.translatable(type().translationKey())));
         stop();
     }

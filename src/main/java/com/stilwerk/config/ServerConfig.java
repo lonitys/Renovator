@@ -18,21 +18,22 @@ public final class ServerConfig {
 
     /** Test overrides (GameTests only); negative = use config. */
     public static int budgetOverride = -1;
+    public static int maxBlocksOverride = -1;
     public static int undoStepsOverride = -1;
 
     static {
         ModConfigSpec.Builder b = new ModConfigSpec.Builder();
         b.push("limits");
-        MAX_BLOCKS_SURVIVAL = b.comment("Maximum blocks one operation may change in survival.")
-                .defineInRange("maxBlocksSurvival", 20_000, 1, 1_000_000);
-        MAX_BLOCKS_CREATIVE = b.comment("Maximum blocks one operation may change in creative.")
-                .defineInRange("maxBlocksCreative", 200_000, 1, 2_000_000);
+        MAX_BLOCKS_SURVIVAL = b.comment("Maximum blocks one operation may change in survival; 0 = no limit (materials are the limit).")
+                .defineInRange("maxBlocksSurvival", 0, 0, Integer.MAX_VALUE);
+        MAX_BLOCKS_CREATIVE = b.comment("Maximum blocks one operation may change in creative; 0 = no limit.")
+                .defineInRange("maxBlocksCreative", 0, 0, Integer.MAX_VALUE);
         BLOCKS_PER_TICK = b.comment("Blocks placed per server tick while applying (spreads big jobs to avoid lag).")
                 .defineInRange("blocksPerTick", 4_000, 100, 100_000);
         MAX_UPLOAD_BYTES = b.comment("Maximum compressed size of an uploaded blueprint in bytes.")
-                .defineInRange("maxUploadBytes", 4 * 1024 * 1024, 64 * 1024, 64 * 1024 * 1024);
-        FLOOD_RADIUS = b.comment("Radius of the automatic building selection.")
-                .defineInRange("floodRadius", 48, 4, 256);
+                .defineInRange("maxUploadBytes", 64 * 1024 * 1024, 64 * 1024, 256 * 1024 * 1024);
+        FLOOD_RADIUS = b.comment("Radius of the automatic building selection (it follows only the building, so a large radius is cheap).")
+                .defineInRange("floodRadius", 128, 4, 512);
         b.pop();
         b.push("undo");
         UNDO_STEPS = b.comment("Undo steps kept per player.").defineInRange("undoSteps", 20, 0, 100);
@@ -50,8 +51,10 @@ public final class ServerConfig {
         return SPEC.isLoaded() ? v.get() : v.getDefault();
     }
 
+    /** Blocks one operation may change; {@link Integer#MAX_VALUE} when unlimited (the default). */
     public static int maxBlocks(boolean creative) {
-        return get(creative ? MAX_BLOCKS_CREATIVE : MAX_BLOCKS_SURVIVAL);
+        int v = maxBlocksOverride >= 0 ? maxBlocksOverride : get(creative ? MAX_BLOCKS_CREATIVE : MAX_BLOCKS_SURVIVAL);
+        return v <= 0 ? Integer.MAX_VALUE : v;
     }
 
     public static int blocksPerTick() {

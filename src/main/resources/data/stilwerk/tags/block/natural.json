@@ -1,15 +1,27 @@
 {
   "values": [
     "#minecraft:dirt", "#minecraft:sand", "#minecraft:base_stone_overworld", "#minecraft:base_stone_nether",
-    "minecraft:end_stone", { "id": "#c:ores", "required": false }, "#minecraft:flowers", "#minecraft:saplings",
-    "#minecraft:replaceable", "#minecraft:ice", "#minecraft:snow", "#minecraft:wart_blocks",
-    "minecraft:gravel", "minecraft:clay", "minecraft:water", "minecraft:lava", "minecraft:bedrock",
-    "minecraft:grass_block", "minecraft:mycelium", "minecraft:podzol", "minecraft:mud", "minecraft:moss_block",
-    "minecraft:sugar_cane", "minecraft:cactus", "minecraft:kelp", "minecraft:kelp_plant", "minecraft:seagrass",
-    "minecraft:tall_seagrass", "minecraft:vine", "minecraft:pointed_dripstone", "minecraft:dripstone_block",
+    "minecraft:end_stone", "#minecraft:flowers", "#minecraft:saplings", "#minecraft:replaceable", "#minecraft:ice",
+    "#minecraft:snow", "#minecraft:wart_blocks", "minecraft:gravel", "minecraft:clay", "minecraft:water", "minecraft:lava",
+    "minecraft:bedrock", "minecraft:grass_block", "minecraft:mycelium", "minecraft:podzol", "minecraft:mud",
+    "minecraft:moss_block", "minecraft:sugar_cane", "minecraft:cactus", "minecraft:kelp", "minecraft:kelp_plant",
+    "minecraft:seagrass", "minecraft:tall_seagrass", "minecraft:vine", "minecraft:pointed_dripstone", "minecraft:dripstone_block",
     "minecraft:amethyst_block", "minecraft:budding_amethyst", "minecraft:obsidian", "minecraft:magma_block",
-    "minecraft:soul_sand", "minecraft:soul_soil", "minecraft:crimson_nylium", "minecraft:warped_nylium",
-    "minecraft:mushroom_stem", "minecraft:red_mushroom_block", "minecraft:brown_mushroom_block",
-    "minecraft:shroomlight", "minecraft:glow_lichen", "minecraft:sculk", "minecraft:sculk_vein"
+    "minecraft:soul_sand", "minecraft:soul_soil", "minecraft:crimson_nylium", "minecraft:warped_nylium", "minecraft:mushroom_stem",
+    "minecraft:red_mushroom_block", "minecraft:brown_mushroom_block", "minecraft:shroomlight", "minecraft:glow_lichen",
+    "minecraft:sculk", "minecraft:sculk_vein", "minecraft:dirt_path", "minecraft:farmland", "#minecraft:crops",
+    "minecraft:pumpkin", "minecraft:melon", "minecraft:attached_pumpkin_stem", "minecraft:attached_melon_stem",
+    "minecraft:bamboo", "minecraft:bamboo_sapling", "minecraft:sweet_berry_bush", "minecraft:cocoa", "minecraft:lily_pad",
+    "minecraft:big_dripleaf", "minecraft:big_dripleaf_stem", "minecraft:small_dripleaf", "minecraft:azalea",
+    "minecraft:moss_carpet", "minecraft:spore_blossom", "minecraft:cave_vines", "minecraft:cave_vines_plant",
+    "minecraft:weeping_vines", "minecraft:weeping_vines_plant", "minecraft:twisting_vines", "minecraft:twisting_vines_plant",
+    "minecraft:mangrove_roots", "minecraft:sea_pickle", "#minecraft:corals", "#minecraft:wall_corals", "#minecraft:coral_blocks",
+    "minecraft:chorus_plant", "minecraft:chorus_flower", "minecraft:nether_wart", "minecraft:suspicious_gravel",
+    "minecraft:bee_nest", "minecraft:frogspawn", "minecraft:turtle_egg", "minecraft:sculk_sensor", "minecraft:sculk_shrieker",
+    "minecraft:sculk_catalyst", "minecraft:pitcher_plant",
+    {"id": "#c:ores", "required": false},
+    {"id": "#c:crops", "required": false},
+    {"id": "farmersdelight:rich_soil", "required": false},
+    {"id": "farmersdelight:rich_soil_farmland", "required": false}
   ]
 }

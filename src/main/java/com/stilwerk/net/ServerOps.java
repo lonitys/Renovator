@@ -182,8 +182,9 @@ public final class ServerOps {
             bb = res.bounds();
             all = com.stilwerk.detail.DetailPlanner.find(level, res, r.seed());
         } else if (r.clicked().isPresent()) {
-            bb = com.stilwerk.detail.DetailPlanner.nearSelection(r.clicked().get()).roughBounds();
-            if (!nearby(p, bb) || !loaded(level, bb.inflatedBy(2))) {
+            // the building detection stops at unloaded chunks; only the clicked spot itself must be loaded
+            bb = new BoundingBox(r.clicked().get()).inflatedBy(com.stilwerk.detail.DetailPlanner.NEAR_PICK + com.stilwerk.detail.DetailPlanner.NEAR_REACH);
+            if (!nearby(p, bb) || !loaded(level, bb)) {
                 tell(p, "stilwerk.error.unloaded");
                 return;
             }
@@ -219,7 +220,7 @@ public final class ServerOps {
         var room = detected.room();
         var type = com.stilwerk.interior.ModuleLibrary.type(r.roomType());
         var result = com.stilwerk.interior.InteriorGenerator.generate(level, room, type, r.seed(),
-                com.stilwerk.interior.InteriorGenerator.houseWood(level, room));
+                com.stilwerk.interior.InteriorGenerator.houseWood(level, room), r.furniture());
         int limit = ServerConfig.maxBlocks(p.isCreative());
         if (result.changes().size() > limit) {
             tell(p, "stilwerk.error.too_big", limit);

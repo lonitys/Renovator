@@ -312,7 +312,16 @@ public final class DevScene {
             case 840 -> shot(mc, "interior_workshop");
             case 842 -> {
                 com.stilwerk.client.InteriorController.nextType(-6); // back to the bedroom
+                for (int i = 0; i < 4 && !com.stilwerk.client.InteriorController.furniture().equals("vanilla"); i++) {
+                    com.stilwerk.client.InteriorController.cycleFurniture();
+                }
+                check("interior_vanilla_choice", com.stilwerk.client.InteriorController.furniture().equals("vanilla"),
+                        com.stilwerk.client.InteriorController.furniture());
+            }
+            case 860 -> shot(mc, "interior_bedroom_vanilla");
+            case 862 -> {
                 com.stilwerk.client.InteriorController.confirm();
+                com.stilwerk.config.ClientConfig.setInteriorFurniture("mods");
             }
             case 880 -> {
                 boolean bed = false;

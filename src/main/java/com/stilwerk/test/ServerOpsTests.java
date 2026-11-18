@@ -6,6 +6,7 @@ import com.stilwerk.blueprint.BlueprintIO;
 import com.stilwerk.core.Selection;
 import com.stilwerk.core.UndoHistory;
 import com.stilwerk.net.PlaceRequest;
+import com.stilwerk.config.ServerConfig;
 import com.stilwerk.net.ServerOps;
 import com.stilwerk.net.SmallPayloads;
 import com.stilwerk.net.SwapRequest;
@@ -72,12 +73,28 @@ public final class ServerOpsTests {
     }
 
     @GameTest(template = T)
-    public static void rejectsTooBig(GameTestHelper h) {
+    public static void rejectsTooBigWhenLimited(GameTestHelper h) {
         FakePlayer p = TestPlayers.survival(h);
         Selection huge = new Selection.Box(h.absolutePos(new BlockPos(0, Y, 0)), h.absolutePos(new BlockPos(40, Y + 40, 40)));
-        ServerOps.swap(p, new SwapRequest(9, huge, OAK_TO_SPRUCE, List.of(), 1, false, false));
+        ServerConfig.maxBlocksOverride = 20_000;
+        try {
+            ServerOps.swap(p, new SwapRequest(9, huge, OAK_TO_SPRUCE, List.of(), 1, false, false));
+        } finally {
+            ServerConfig.maxBlocksOverride = -1;
+        }
         h.assertTrue("stilwerk.error.too_big".equals(ServerOps.lastMessageForTests(p.getUUID())), "too big: " + ServerOps.lastMessageForTests(p.getUUID()));
         h.assertFalse(ServerOps.pendingForTests().containsKey(p.getUUID()), "nothing pending");
+        h.succeed();
+    }
+
+    @GameTest(template = T)
+    public static void noBlockLimitByDefault(GameTestHelper h) {
+        h.assertTrue(ServerConfig.maxBlocks(false) == Integer.MAX_VALUE && ServerConfig.maxBlocks(true) == Integer.MAX_VALUE,
+                "no block limit: survival " + ServerConfig.maxBlocks(false) + ", creative " + ServerConfig.maxBlocks(true));
+        FakePlayer p = TestPlayers.survival(h);
+        Selection big = new Selection.Box(h.absolutePos(new BlockPos(0, Y, 0)), h.absolutePos(new BlockPos(40, Y + 40, 40)));
+        ServerOps.swap(p, new SwapRequest(10, big, OAK_TO_SPRUCE, List.of(), 1, false, false));
+        h.assertFalse("stilwerk.error.too_big".equals(ServerOps.lastMessageForTests(p.getUUID())), "68 921 blocks are not too big");
         h.succeed();
     }
 

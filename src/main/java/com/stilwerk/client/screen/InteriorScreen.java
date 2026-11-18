@@ -1,6 +1,7 @@
 package com.stilwerk.client.screen;
 
 import com.stilwerk.client.InteriorController;
+import com.stilwerk.interior.FurnitureChoice;
 import com.stilwerk.interior.ModuleLibrary;
 import com.stilwerk.interior.Room;
 import com.stilwerk.interior.RoomType;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -43,7 +45,18 @@ public final class InteriorScreen extends StilwerkScreen {
                 InteriorController.start(id);
             }).bounds(bx, by, bw, bh).build());
         }
+        Button furniture = Button.builder(furnitureLabel(), b -> {
+            InteriorController.cycleFurniture();
+            b.setMessage(furnitureLabel());
+        }).bounds(x + 8, y + 32, w - 16, 18).build();
+        furniture.active = FurnitureChoice.options().size() > 1;
+        furniture.setTooltip(Tooltip.create(Component.translatable("stilwerk.interior.furniture.tip")));
+        addRenderableWidget(furniture);
         addRenderableWidget(Button.builder(Component.translatable("gui.cancel"), b -> onClose()).bounds(x + 8, y + h - 26, w - 16, 20).build());
+    }
+
+    private static Component furnitureLabel() {
+        return Component.translatable("stilwerk.interior.furniture", FurnitureChoice.label(InteriorController.furniture()));
     }
 
     /** Windows = connected groups of glass blocks. */
@@ -74,10 +87,6 @@ public final class InteriorScreen extends StilwerkScreen {
         for (long k : room.floor()) maxH = Math.max(maxH, room.height(k));
         g.drawString(font, Component.translatable("stilwerk.interior.info", room.width(), room.depth(), maxH, room.floor().size(),
                 room.doors().size(), windowCount()), panelX + 8, panelY + 22, 0xFFB8C4CE);
-        List<String> mods = ModuleLibrary.furnitureMods();
-        Component modLine = mods.isEmpty() ? Component.translatable("stilwerk.interior.vanilla")
-                : Component.translatable("stilwerk.interior.mods", String.join(", ", mods));
-        g.drawString(font, modLine, panelX + 8, panelY + 36, mods.isEmpty() ? 0xFF9AA8B4 : 0xFF9AE0A0);
         g.drawString(font, Component.translatable("stilwerk.interior.pick"), panelX + 8, panelY + 52, 0xFFE8D9A8);
         for (int i = 0; i < ICONS.length; i++) {
             int idx = i + 1;

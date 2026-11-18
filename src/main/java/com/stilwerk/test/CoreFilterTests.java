@@ -91,4 +91,17 @@ public final class CoreFilterTests {
         h.assertTrue(Groups.partner(lower, Blocks.OAK_PLANKS.defaultBlockState()).isEmpty(), "planks have no partner");
         h.succeed();
     }
+
+    @GameTest(template = T)
+    public static void legacyFoldersAreMoved(GameTestHelper h) throws java.io.IOException {
+        java.nio.file.Path base = java.nio.file.Files.createTempDirectory("stilwerk_folders");
+        java.nio.file.Path old = java.nio.file.Files.createDirectories(base.resolve("vorlagen"));
+        java.nio.file.Files.writeString(old.resolve("mine.json"), "{}");
+        java.nio.file.Path dir = com.stilwerk.config.Folders.resolve(base, "templates", "vorlagen");
+        h.assertTrue(dir.equals(base.resolve("templates")), "English folder used: " + dir);
+        h.assertTrue(java.nio.file.Files.exists(dir.resolve("mine.json")), "old files moved along");
+        h.assertFalse(java.nio.file.Files.exists(old), "German folder gone");
+        h.assertTrue(com.stilwerk.config.Folders.resolve(base, "mixes", "mischungen").equals(base.resolve("mixes")), "no old folder: plain path");
+        h.succeed();
+    }
 }

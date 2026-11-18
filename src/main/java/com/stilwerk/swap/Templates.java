@@ -18,7 +18,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.fml.loading.FMLPaths;
 import org.slf4j.Logger;
 
-/** Built-in style templates, the player's own ({@code config/stilwerk/vorlagen}) and server-wide datapack ones. */
+/** Built-in style templates, the player's own ({@code config/stilwerk/templates}) and server-wide datapack ones. */
 public final class Templates {
     private Templates() {}
 
@@ -29,7 +29,7 @@ public final class Templates {
 
     public static Path dirOverride;
     private static final JsonStore<Template> STORE = new JsonStore<>(Template.CODEC,
-            () -> dirOverride != null ? dirOverride : FMLPaths.CONFIGDIR.get().resolve("stilwerk").resolve("vorlagen"));
+            () -> dirOverride != null ? dirOverride : com.stilwerk.config.Folders.resolve(FMLPaths.CONFIGDIR.get().resolve("stilwerk"), "templates", "vorlagen"));
 
     /** Datapack templates: loaded on the server, synced to clients. */
     private static volatile List<Template> datapack = List.of();

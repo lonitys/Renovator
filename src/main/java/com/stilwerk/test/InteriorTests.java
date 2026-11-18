@@ -149,7 +149,7 @@ public final class InteriorTests {
         room(h, 7, 6, 3);
         net.neoforged.neoforge.common.util.FakePlayer p = TestPlayers.player(h, net.minecraft.world.level.GameType.CREATIVE);
         com.stilwerk.net.ServerOps.interior(p, new com.stilwerk.net.InteriorRequest(1, h.absolutePos(new BlockPos(3, Y0 - 1, 3)),
-                Direction.UP, "bedroom", 99, false));
+                Direction.UP, "bedroom", 99, "mods", false));
         h.succeedWhen(() -> {
             boolean bed = false;
             for (int x = 2; x <= 8; x++)

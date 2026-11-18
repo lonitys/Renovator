@@ -14,13 +14,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 
-/** Built-in mix palettes plus the player's own ({@code config/stilwerk/mischungen/*.json}). */
+/** Built-in mix palettes plus the player's own ({@code config/stilwerk/mixes/*.json}). */
 public final class Mixes {
     private Mixes() {}
 
     public static Path dirOverride;
     private static final JsonStore<MixPalette> STORE = new JsonStore<>(MixPalette.CODEC,
-            () -> dirOverride != null ? dirOverride : FMLPaths.CONFIGDIR.get().resolve("stilwerk").resolve("mischungen"));
+            () -> dirOverride != null ? dirOverride : com.stilwerk.config.Folders.resolve(FMLPaths.CONFIGDIR.get().resolve("stilwerk"), "mixes", "mischungen"));
 
     private static ResourceLocation mc(String path) {
         return ResourceLocation.withDefaultNamespace(path);

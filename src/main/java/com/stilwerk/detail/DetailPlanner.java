@@ -1,9 +1,9 @@
 package com.stilwerk.detail;
 
+import com.stilwerk.core.AutoSelect;
 import com.stilwerk.core.Change;
 import com.stilwerk.core.ChangeSet;
 import com.stilwerk.core.ResolvedSelection;
-import com.stilwerk.core.Selection;
 import com.stilwerk.detail.DetailTypes.Choice;
 import com.stilwerk.detail.DetailTypes.Suggestion;
 import com.stilwerk.detail.rule.CornerRule;
@@ -26,8 +26,10 @@ import net.minecraft.world.level.BlockGetter;
 public final class DetailPlanner {
     private DetailPlanner() {}
 
-    /** Half size of the analysis box around a clicked block (17³). */
-    public static final int NEAR_RADIUS = 8;
+    /** Radius of the building detection around a clicked block (fixed: client and server must find the same). */
+    public static final int NEAR_RADIUS = 48;
+    /** How far from the clicked block the detection may start when the block itself is not built (grass at the door). */
+    public static final int NEAR_REACH = 2;
     /** How close a suggestion must be to the clicked block. */
     public static final int NEAR_PICK = 3;
 
@@ -38,7 +40,13 @@ public final class DetailPlanner {
         return RULES;
     }
 
+    /**
+     * Suggestions for a selection. A marked box is narrowed to its buildings first, so roads, garden walls and field
+     * fences that lead away from a building get no suggestions; a building selection is used as it is.
+     */
     public static List<Suggestion> find(BlockGetter level, ResolvedSelection sel, long seed) {
+        if (sel.isBox()) sel = AutoSelect.buildingsIn(level, sel);
+        if (sel.isEmpty()) return List.of();
         BuildingView view = new BuildingView(level, sel);
         DetailContext ctx = new DetailContext(view, seed);
         List<Suggestion> out = new ArrayList<>();
@@ -46,13 +54,12 @@ public final class DetailPlanner {
         return out;
     }
 
-    public static Selection nearSelection(BlockPos clicked) {
-        return new Selection.Box(clicked.offset(-NEAR_RADIUS, -NEAR_RADIUS, -NEAR_RADIUS), clicked.offset(NEAR_RADIUS, NEAR_RADIUS, NEAR_RADIUS));
-    }
-
-    /** Suggestions whose area lies within {@link #NEAR_PICK} of the clicked block. */
+    /** Suggestions on the clicked building whose area lies within {@link #NEAR_PICK} of the clicked block. */
     public static List<Suggestion> near(BlockGetter level, BlockPos clicked, long seed) {
-        ResolvedSelection sel = nearSelection(clicked).resolve(level, Integer.MAX_VALUE);
+        BlockPos start = AutoSelect.nearestBuilt(level, clicked, NEAR_REACH);
+        if (start == null) return List.of();
+        ResolvedSelection sel = AutoSelect.flood(level, start, NEAR_RADIUS, Integer.MAX_VALUE);
+        if (sel.isEmpty()) return List.of();
         List<Suggestion> out = new ArrayList<>();
         for (Suggestion s : find(level, sel, seed)) {
             if (s.area().inflatedBy(NEAR_PICK).isInside(clicked)) out.add(s);

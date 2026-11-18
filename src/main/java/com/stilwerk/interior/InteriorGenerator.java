@@ -41,7 +41,8 @@ import net.minecraft.resources.ResourceLocation;
 public final class InteriorGenerator {
     private InteriorGenerator() {}
 
-    public record Result(ChangeSet changes, List<String> placed, DyeColor color) {}
+    /** {@code footprints}: floor cells reserved by furniture groups (also where a group has no block). */
+    public record Result(ChangeSet changes, List<String> placed, DyeColor color, LongOpenHashSet footprints) {}
 
     private static final DyeColor[] COLORS = {DyeColor.RED, DyeColor.WHITE, DyeColor.LIGHT_GRAY, DyeColor.BLUE, DyeColor.GREEN,
             DyeColor.BROWN, DyeColor.CYAN, DyeColor.YELLOW, DyeColor.ORANGE, DyeColor.PURPLE, DyeColor.LIGHT_BLUE, DyeColor.LIME};
@@ -57,7 +58,8 @@ public final class InteriorGenerator {
         final Family wood;
         final DyeColor color;
         final LongOpenHashSet taken = new LongOpenHashSet();       // any cell used by a module
-        final LongOpenHashSet takenFloor = new LongOpenHashSet();  // floor cells under modules
+        final LongOpenHashSet takenFloor = new LongOpenHashSet();  // floor cells under modules, rug, existing carpets
+        final LongOpenHashSet moduleFloor = new LongOpenHashSet(); // floor cells reserved by modules only
         final Long2ObjectLinkedOpenHashMap<BlockState> out = new Long2ObjectLinkedOpenHashMap<>();
         final List<String> placed = new ArrayList<>();
         final double cx, cz;
@@ -116,7 +118,7 @@ public final class InteriorGenerator {
         }
         if (type.rug()) rug(st);
         if (type.light()) light(st);
-        return new Result(build(st), st.placed, st.color);
+        return new Result(build(st), st.placed, st.color, st.moduleFloor);
     }
 
     private static Direction back(Rotation rot) {
@@ -253,6 +255,7 @@ public final class InteriorGenerator {
             st.taken.add(w.asLong());
         });
         for (long k : c.footprint()) {
+            st.moduleFloor.add(k);
             st.takenFloor.add(k);
             st.taken.add(k);
         }

@@ -102,7 +102,7 @@ public final class InteriorTests {
         InteriorGenerator.Result r = InteriorGenerator.generate(h.getLevel(), room, bedroom, 42, wood("spruce"));
         h.assertTrue(r.placed().stream().anyMatch(id -> id.startsWith("bed")), "a bed group placed: " + r.placed());
         h.assertTrue(r.placed().stream().anyMatch(id -> id.startsWith("wardrobe")), "a wardrobe placed: " + r.placed());
-        java.util.Set<Long> blocked = new java.util.HashSet<>();
+        java.util.Set<Long> blocked = new java.util.HashSet<>(r.footprints());
         boolean spruce = false;
         for (Change c : r.changes().changes()) {
             h.assertTrue(c.oldState().isAir(), "only into air: " + c.pos() + " " + c.oldState());

@@ -48,7 +48,8 @@ Applier, Undo, Bibliothek). Die Schnittstellen hier sind so geschnitten, dass si
   die Luft löscht die Auswahl.
 - **Automatisch:** Schleichen + Rechtsklick auf einen Block → Flood-Fill über zusammenhängende
   *gebaute* Blöcke (26er-Nachbarschaft), Radius einstellbar (Standard 48), Obergrenze =
-  Blocklimit. Ergebnis ist eine Blockmenge (mit Bounding-Box-Rahmen und hervorgehobenen Blöcken).
+  Blocklimit. Ergebnis ist eine Blockmenge (mit Bounding-Box-Rahmen). Übertragen wird nur
+  (Startblock, Radius); Client und Server berechnen die Menge mit demselben Code aus ihrer Welt.
 - **Natur vs. gebaut:**
   - Natur = Block-Tag `stilwerk:natural` (Erde, Gras, Sand, Kies, Ton, Grundgestein-Tags von
     Oberwelt/Nether/End, Erze `#c:ores`, Pflanzen, Flüssigkeiten, Schnee, Eis …).
@@ -77,10 +78,13 @@ Blöcke neu *setzen* (im Survival leer, siehe Abschnitt 3).
 - Ergebnis jedes Planers ist ein **ChangeSet**: Liste von (Position, alter Zustand, neuer
   Zustand, optional Block-Entity-Daten), gruppiert: mehrteilige Blöcke (Tür oben/unten) bilden
   eine Gruppe und werden immer im selben Tick gesetzt.
-- Der **Applier** setzt pro Server-Tick ein Budget (Standard 4000 Blöcke, einstellbar), zeigt
-  dem Spieler einen Fortschrittsbalken. Setzen ohne Nachbar-Formupdates; danach ein zweiter Durchgang,
-  der Verbindungsformen (Zäune, Mauern, Scheiben) der geänderten Blöcke und ihrer direkten
-  Nachbarn neu berechnet.
+- Der **Applier** setzt pro Server-Tick ein Budget (Standard 4000 Blöcke, einstellbar) und zeigt
+  den Fortschritt als Balken in der Aktionsleiste. Gesetzt wird ohne Nachbar-Formupdates (Zustände
+  werden exakt übernommen, auch per Debug-Stick gesetzte). Nur wo sich die Form geändert hat
+  (Zaun ↔ Mauer), berechnet ein zweiter Durchgang die Verbindungen dieser Blöcke und ihrer
+  verbindbaren Nachbarn neu.
+- Bezahlt wird pro Gruppe beim Setzen; eine Gruppe, deren Ausgangszustand sich inzwischen
+  geändert hat oder die nicht bezahlt werden kann, wird übersprungen.
 - Erhalten bleiben: Ausrichtung, Hälfte, Treppenform, Achse, Wasser (`waterlogged`), Tür-Scharnier
   und -Offen-Zustand, Schildertexte.
 
@@ -120,6 +124,8 @@ Blöcke neu *setzen* (im Survival leer, siehe Abschnitt 3).
      (`<holz>_planks`, `_log`, `_wood`, `stripped_<holz>_log` …).
   3. **Form aus der Blockklasse** (`StairBlock` → STAIRS, `SlabBlock` → SLAB, `WallBlock` → WALL …),
      **Material aus dem Namen** (Suffix entfernen; Plural-Regel `brick_stairs` ↔ `bricks`).
+- Jeder übrige Block mit Item (Wolle, Glas, Laterne …) ist eine **Einzelfamilie** (nur FULL), damit
+  sich auch solche Blöcke tauschen lassen; Eigenschaften werden auch dort per Name übertragen.
 - Familien werden beim Laden der Welt/Datapacks auf Server und Client gleich aufgebaut.
 
 ### Form-Ersatz
@@ -164,9 +170,11 @@ Blöcke neu *setzen* (im Survival leer, siehe Abschnitt 3).
 ## Abschnitt 3: Bauplan-Bibliothek, Kopieren, Import
 
 ### Kopieren
-- Modus *Bauplan* mit aktiver Auswahl → „Kopieren": erfasst alle Nicht-Luft-Blöcke der Auswahl
-  (Natur optional weglassen). Block-Entity-Daten: im Kreativ vollständig, im Survival nur
-  Schildertexte (Behälter werden leer gesetzt). Entities (Rahmen, Rüstungsständer, Bilder) werden in
+- Modus *Bauplan* mit aktiver Auswahl → „Kopieren": erfasst die Blöcke der Auswahl aus der
+  Client-Welt (Natur optional weglassen; Luft innerhalb eines Quaders wird als „Luft" gespeichert,
+  Stellen außerhalb einer automatischen Auswahl als „nicht anfassen"). Block-Entity-Daten: was der
+  Client kennt (Schilder, Banner, Köpfe); Behälterinhalte kennt der Client nicht, Behälter sind im
+  Bauplan also leer. Beim Einsetzen übernimmt der Server im Survival nur Schildertexte. Entities (Rahmen, Rüstungsständer, Bilder) werden in
   dieser Stufe **nicht** kopiert.
 - Kopie liegt im persönlichen Zwischenspeicher und kann sofort eingesetzt oder benannt
   gespeichert werden.

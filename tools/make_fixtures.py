@@ -1,4 +1,4 @@
-"""Writes schematic test fixtures into src/main/resources/data/stilwerk/stilwerk_fixtures/.
+"""Writes schematic test fixtures into src/main/resources/data/renovator/renovator_fixtures/.
 
 Written straight from the format descriptions (Sponge Schematic v2/v3, Litematica v6, vanilla structure),
 independent of the Java importers, so the GameTests check the importers against the formats.
@@ -7,7 +7,7 @@ import gzip
 import struct
 from pathlib import Path
 
-OUT = Path("src/main/resources/data/stilwerk/stilwerk_fixtures")
+OUT = Path("src/main/resources/data/renovator/renovator_fixtures")
 DV = 3955  # Minecraft 1.21.1
 
 END, BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, BYTE_ARRAY, STRING, LIST, COMPOUND, INT_ARRAY, LONG_ARRAY = range(13)

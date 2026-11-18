@@ -4,7 +4,7 @@ from pathlib import Path
 
 from PIL import Image
 
-OUT = Path(sys.argv[1] if len(sys.argv) > 1 else "src/main/resources/assets/stilwerk/textures/item/architect_wand.png")
+OUT = Path(sys.argv[1] if len(sys.argv) > 1 else "src/main/resources/assets/renovator/textures/item/architect_wand.png")
 
 WOOD_D, WOOD_M, WOOD_L = (73, 54, 28), (104, 78, 47), (137, 103, 60)
 GOLD_D, GOLD_M, GOLD_L = (168, 116, 18), (230, 180, 40), (255, 236, 120)

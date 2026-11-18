@@ -1,4 +1,4 @@
-"""Writes the interior designer data: data/stilwerk/stilwerk_interior/modules.json and recipes.json.
+"""Writes the interior designer data: data/renovator/renovator_interior/modules.json and recipes.json.
 
 Modules are authored in oak with the token COLOR for dye colours. Front faces south (+z), back at z=0 against
 the wall. Every category has a vanilla module; Macaw's Furniture (mcwfurnitures) and Refurbished Furniture
@@ -18,7 +18,7 @@ import json
 import re
 from pathlib import Path
 
-OUT = Path("src/main/resources/data/stilwerk/stilwerk_interior")
+OUT = Path("src/main/resources/data/renovator/renovator_interior")
 MCW = "mcwfurnitures"
 RF = "refurbished_furniture"
 

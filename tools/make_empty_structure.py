@@ -58,4 +58,4 @@ def main(out_dir):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "src/main/resources/data/stilwerk/structure")
+    main(sys.argv[1] if len(sys.argv) > 1 else "src/main/resources/data/renovator/structure")

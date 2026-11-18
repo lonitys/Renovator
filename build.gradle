@@ -29,7 +29,7 @@ neoForge {
             // Visual check: ./gradlew runClient -PquickPlay=<world in run/saves> [-PwithSodium=<sodium jar>]
             if (project.hasProperty('quickPlay')) {
                 programArguments.addAll('--quickPlaySingleplayer', project.property('quickPlay').toString())
-                systemProperty(project.hasProperty('probe') ? 'stilwerk.probe' : project.hasProperty('gallery') ? 'stilwerk.gallery' : 'stilwerk.devScene', 'true')
+                systemProperty(project.hasProperty('probe') ? 'renovator.probe' : project.hasProperty('gallery') ? 'renovator.gallery' : 'renovator.devScene', 'true')
             }
         }
         server {
@@ -73,9 +73,9 @@ dependencies {
 
 // Game tests and the dev scene only run in the dev environment; keep them out of the release jar.
 tasks.named('jar', Jar) {
-    exclude 'com/stilwerk/test/**'
-    exclude 'data/stilwerk/structure/**'
-    exclude 'data/stilwerk/stilwerk_fixtures/**'
+    exclude 'com/renovator/test/**'
+    exclude 'data/renovator/structure/**'
+    exclude 'data/renovator/renovator_fixtures/**'
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

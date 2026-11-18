@@ -113,6 +113,10 @@ public final class PreviewController {
         mesh = null;
     }
 
+    public static void renderEntities(com.mojang.blaze3d.vertex.PoseStack pose, Vec3 camera, float partialTick) {
+        if (mesh != null && showAfter) mesh.drawEntities(pose, camera, anchor, partialTick);
+    }
+
     public static void render(Matrix4f modelView, Matrix4f projection, Vec3 camera) {
         if (mesh != null && showAfter) mesh.draw(modelView, projection, camera, anchor);
     }

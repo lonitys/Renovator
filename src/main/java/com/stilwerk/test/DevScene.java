@@ -237,12 +237,132 @@ public final class DevScene {
             }
             case 445 -> shot(mc, "report");
             case 450 -> mc.setScreen(null);
+            // ---------------------------------------------------------------- stage 3: details
             case 460 -> {
+                teleport(server, mc, o.getX() + 3.5, o.getY() + 2, o.getZ() - 10, 0, 10);
+                ClientState.mode = WandMode.DETAILS;
+                Selection.Box b = (Selection.Box) hutBox();
+                ClientState.setBox(BoundingBox.fromCorners(b.a(), b.b()));
+            }
+            case 480 -> com.stilwerk.client.WandClient.openDetails();
+            case 500 -> {
+                check("details_found", mc.screen instanceof com.stilwerk.client.screen.DetailScreen, mc.screen);
+                shot(mc, "details_screen");
+            }
+            case 505 -> {
+                mc.setScreen(null);
+                detailFound = com.stilwerk.client.DetailController.findForSelection(hutBox());
+                check("details_count", detailFound != null && detailFound.size() >= 5, detailFound == null ? -1 : detailFound.size());
+                int window = 0;
+                for (int i = 0; i < detailFound.size(); i++) if (detailFound.get(i).rule().equals("window")) window = i;
+                for (var s : detailFound) {
+                    if (!s.rule().equals("stairs")) continue;
+                    LOG.info("[stilwerk dev scene] stairs suggestion at {} state {} first change {}", s.anchor().subtract(o), mc.level.getBlockState(s.anchor()),
+                            s.variants().get(0).changes().changes().stream().limit(4).map(c -> c.pos().subtract(o).toShortString()).toList());
+                }
+                com.stilwerk.client.DetailController.walk(hutBox(), detailFound, window);
+            }
+            case 525 -> shot(mc, "details_walk_window");
+            case 527 -> com.stilwerk.client.DetailController.cycleVariant();
+            case 545 -> shot(mc, "details_walk_variant2");
+            case 547 -> com.stilwerk.client.DetailController.cycleVariant();
+            case 565 -> shot(mc, "details_walk_variant3");
+            case 567 -> {
+                com.stilwerk.client.DetailController.stop();
+                com.stilwerk.client.DetailController.applyAll(hutBox(), detailFound);
+            }
+            case 610 -> {
+                Set<Block> found = blocksInBox(mc, BoundingBox.fromCorners(o.offset(-2, -1, -3), o.offset(10, 9, 9)));
+                check("details_applied", found.contains(Blocks.SPRUCE_TRAPDOOR) || found.contains(Blocks.LANTERN), found.size());
+                shot(mc, "details_after");
+                teleport(server, mc, o.getX() - 6.5, o.getY() + 4, o.getZ() - 7, -45, 20);
+            }
+            case 630 -> shot(mc, "details_after_side");
+            // ---------------------------------------------------------------- stage 4: interior
+            case 640 -> {
+                ClientState.mode = WandMode.INTERIOR;
+                ClientState.clear();
+                roomO = o.offset(0, 0, 14);
+                server.execute(() -> buildRoom(server.overworld(), roomO));
+            }
+            case 660 -> {
+                teleport(server, mc, roomO.getX() + 1.5, roomO.getY() + 2.4, roomO.getZ() + 1.5, -45, 32);
+                com.stilwerk.client.InteriorController.open(roomO.offset(5, -1, 4), Direction.UP);
+            }
+            case 680 -> {
+                check("interior_menu", mc.screen instanceof com.stilwerk.client.screen.InteriorScreen, mc.screen);
+                shot(mc, "interior_menu");
+                mc.setScreen(null);
+                com.stilwerk.client.InteriorController.start("bedroom");
+            }
+            case 700 -> shot(mc, "interior_bedroom");
+            case 702 -> com.stilwerk.client.InteriorController.reroll();
+            case 720 -> shot(mc, "interior_bedroom_reroll");
+            case 722 -> com.stilwerk.client.InteriorController.nextType(1);
+            case 740 -> shot(mc, "interior_living");
+            case 742 -> com.stilwerk.client.InteriorController.nextType(1);
+            case 760 -> shot(mc, "interior_kitchen");
+            case 762 -> com.stilwerk.client.InteriorController.nextType(1);
+            case 780 -> shot(mc, "interior_dining");
+            case 782 -> com.stilwerk.client.InteriorController.nextType(1);
+            case 800 -> shot(mc, "interior_library");
+            case 802 -> com.stilwerk.client.InteriorController.nextType(1);
+            case 820 -> shot(mc, "interior_bath");
+            case 822 -> com.stilwerk.client.InteriorController.nextType(1);
+            case 840 -> shot(mc, "interior_workshop");
+            case 842 -> {
+                com.stilwerk.client.InteriorController.nextType(-6); // back to the bedroom
+                com.stilwerk.client.InteriorController.confirm();
+            }
+            case 880 -> {
+                boolean bed = false;
+                for (BlockPos p : BlockPos.betweenClosed(roomO.offset(1, 0, 1), roomO.offset(9, 0, 8))) {
+                    if (mc.level.getBlockState(p).getBlock() instanceof net.minecraft.world.level.block.BedBlock) bed = true;
+                }
+                check("interior_placed_bed", bed, roomO);
+                shot(mc, "interior_placed");
+            }
+            case 890 -> {
                 LOG.info("[stilwerk dev scene] DONE with {} failed checks", fails);
                 mc.stop();
             }
             default -> {}
         }
+    }
+
+    private static List<com.stilwerk.detail.DetailTypes.Suggestion> detailFound;
+    private static BlockPos roomO;
+
+    private static Set<Block> blocksInBox(Minecraft mc, BoundingBox bb) {
+        Set<Block> out = new HashSet<>();
+        for (BlockPos p : BlockPos.betweenClosed(bb.minX(), bb.minY(), bb.minZ(), bb.maxX(), bb.maxY(), bb.maxZ())) {
+            out.add(mc.level.getBlockState(p).getBlock());
+        }
+        return out;
+    }
+
+    /** A closed spruce room (interior 9 x 4 x 8) with a door north and windows east and south. */
+    static void buildRoom(ServerLevel level, BlockPos r) {
+        for (int x = 0; x <= 10; x++)
+            for (int z = 0; z <= 9; z++) {
+                level.setBlock(r.offset(x, -1, z), Blocks.SPRUCE_PLANKS.defaultBlockState(), 2);
+                for (int y = 0; y <= 4; y++) {
+                    boolean wall = x == 0 || z == 0 || x == 10 || z == 9;
+                    boolean corner = (x == 0 || x == 10) && (z == 0 || z == 9);
+                    BlockState s = y == 4 ? Blocks.SPRUCE_PLANKS.defaultBlockState()
+                            : corner ? Blocks.STRIPPED_SPRUCE_LOG.defaultBlockState() : wall ? Blocks.SPRUCE_PLANKS.defaultBlockState() : Blocks.AIR.defaultBlockState();
+                    level.setBlock(r.offset(x, y, z), s, 2);
+                }
+            }
+        BlockState door = Blocks.SPRUCE_DOOR.defaultBlockState().setValue(DoorBlock.FACING, Direction.SOUTH);
+        level.setBlock(r.offset(5, 0, 0), door.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER), 2);
+        level.setBlock(r.offset(5, 1, 0), door.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), 2);
+        for (int y = 1; y <= 2; y++) {
+            level.setBlock(r.offset(10, y, 4), Blocks.GLASS.defaultBlockState(), 2);
+            level.setBlock(r.offset(10, y, 5), Blocks.GLASS.defaultBlockState(), 2);
+            level.setBlock(r.offset(4, y, 9), Blocks.GLASS.defaultBlockState(), 2);
+        }
+        level.setBlock(r.offset(9, 3, 8), Blocks.LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, true), 2);
     }
 
     private static Set<Block> blocksInHut(Minecraft mc) {

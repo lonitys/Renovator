@@ -41,9 +41,14 @@ public final class StairsRule implements DetailRule {
             if (run.size() < 2) continue;
             used.addAll(run);
             Direction left = f.getCounterClockWise(), right = f.getClockWise();
-            int width = 1;
-            for (Direction side : new Direction[]{left, right}) {
-                for (BlockPos c = p.relative(side); step(v, c, f) && width <= 4; c = c.relative(side)) width++;
+            // widest row of the run: a roof stays wide even where a row has gaps (chains, dormers)
+            int width = 0;
+            for (BlockPos stepPos : run) {
+                int w = 1;
+                for (Direction side : new Direction[]{left, right}) {
+                    for (BlockPos c = stepPos.relative(side); step(v, c, f) && w <= 4; c = c.relative(side)) w++;
+                }
+                width = Math.max(width, w);
             }
             if (width > 3) continue; // a roof, not a staircase
             boolean headroom = run.stream().allMatch(c -> v.free(c.above()) && v.free(c.above(2)));

@@ -14,6 +14,11 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -33,10 +38,15 @@ public final class GhostMesh implements AutoCloseable {
 
     private final @Nullable VertexBuffer buffer;
     private final int count;
+    /** Blocks drawn by a block-entity renderer (beds, chests, signs ...): rendered live with their renderer. */
+    private final List<EntityGhost> entities;
 
-    private GhostMesh(@Nullable VertexBuffer buffer, int count) {
+    private record EntityGhost(BlockPos rel, BlockEntity be) {}
+
+    private GhostMesh(@Nullable VertexBuffer buffer, int count, List<EntityGhost> entities) {
         this.buffer = buffer;
         this.count = count;
+        this.entities = entities;
     }
 
     public int count() {
@@ -59,10 +69,18 @@ public final class GhostMesh implements AutoCloseable {
             ghosts.put(anchor.offset(b.rel()).asLong(), b.state());
         }
         GhostView view = new GhostView(level, ghosts);
+        List<EntityGhost> entities = new java.util.ArrayList<>();
         int n = 0;
         for (Block b : blocks) {
             if (n >= max) break;
             BlockState state = b.state();
+            if (state.getBlock() instanceof EntityBlock eb && entities.size() < 256) {
+                BlockEntity be = eb.newBlockEntity(anchor.offset(b.rel()), state);
+                if (be != null && mc.getBlockEntityRenderDispatcher().getRenderer(be) != null) {
+                    be.setLevel(level);
+                    entities.add(new EntityGhost(b.rel(), be));
+                }
+            }
             if (state.isAir() || state.getRenderShape() != RenderShape.MODEL) continue;
             BakedModel model = dispatcher.getBlockModel(state);
             BlockPos world = anchor.offset(b.rel());
@@ -80,12 +98,33 @@ public final class GhostMesh implements AutoCloseable {
             n++;
         }
         MeshData mesh = builder.build();
-        if (mesh == null) return new GhostMesh(null, 0);
+        if (mesh == null) return new GhostMesh(null, 0, entities);
         VertexBuffer vb = new VertexBuffer(VertexBuffer.Usage.STATIC);
         vb.bind();
         vb.upload(mesh);
         VertexBuffer.unbind();
-        return new GhostMesh(vb, n);
+        return new GhostMesh(vb, n, entities);
+    }
+
+    /** Draws the block-entity ghosts (opaque, full bright) with their renderers. */
+    public void drawEntities(PoseStack pose, Vec3 camera, BlockPos anchor, float partialTick) {
+        if (entities.isEmpty()) return;
+        Minecraft mc = Minecraft.getInstance();
+        MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
+        for (EntityGhost g : entities) {
+            BlockEntityRenderer<BlockEntity> r = mc.getBlockEntityRenderDispatcher().getRenderer(g.be());
+            if (r == null) continue;
+            pose.pushPose();
+            pose.translate(anchor.getX() + g.rel().getX() - camera.x, anchor.getY() + g.rel().getY() - camera.y,
+                    anchor.getZ() + g.rel().getZ() - camera.z);
+            try {
+                r.render(g.be(), partialTick, pose, buffers, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
+            } catch (RuntimeException e) {
+                // a renderer that needs a real world entry: skip it in the preview
+            }
+            pose.popPose();
+        }
+        buffers.endBatch();
     }
 
     /** Draws the mesh with its rel (0,0,0) at {@code anchor}. */
@@ -104,6 +143,10 @@ public final class GhostMesh implements AutoCloseable {
         RenderSystem.polygonOffset(0.0f, 0.0f);
         RenderSystem.disablePolygonOffset();
         rt.clearRenderState();
+    }
+
+    public boolean hasEntities() {
+        return !entities.isEmpty();
     }
 
     @Override

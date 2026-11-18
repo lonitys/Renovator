@@ -179,6 +179,7 @@ T = {
     "stilwerk.interior.pick": ("Wie soll der Raum eingerichtet werden?", "How should the room be furnished?"),
     "stilwerk.interior.hint": ("%s · %s Möbel-Gruppen · ↑ neu würfeln · ←/→ Raumtyp · Enter einsetzen · Esc", "%s · %s furniture groups · ↑ reroll · ←/→ room type · Enter place · Esc"),
     "stilwerk.interior.cancelled": ("Einrichten abgebrochen", "Furnishing cancelled"),
+    "stilwerk.interior.placed": ("%s wird eingerichtet …", "Furnishing the %s …"),
     "stilwerk.interior.no_space": ("Hier ist kein freier Platz", "No free space here"),
     "stilwerk.interior.no_space_at": ("Hier ist kein freier Platz (%s, %s, %s)", "No free space here (%s, %s, %s)"),
     "stilwerk.interior.open": ("Der Raum ist nicht geschlossen oder zu groß (max. 24×12×24)", "The room is not closed or too large (max 24×12×24)"),

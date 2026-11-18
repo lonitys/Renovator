@@ -139,6 +139,29 @@ public final class DetailTests {
     }
 
     @GameTest(template = T)
+    public static void roofIsNotAStaircase(GameTestHelper h) {
+        // a gable roof: 10 wide rows of stairs rising from both sides, gables filled with planks
+        for (int x = 1; x <= 10; x++)
+            for (int step = 0; step < 4; step++) {
+                h.setBlock(new BlockPos(x, Y0 + step, 2 + step), Blocks.OAK_STAIRS.defaultBlockState().setValue(StairBlock.FACING, Direction.SOUTH));
+                h.setBlock(new BlockPos(x, Y0 + step, 11 - step), Blocks.OAK_STAIRS.defaultBlockState().setValue(StairBlock.FACING, Direction.NORTH));
+            }
+        for (int step = 0; step < 3; step++)
+            for (int z = 3 + step; z <= 10 - step; z++) {
+                h.setBlock(new BlockPos(2, Y0 + step, z), Blocks.OAK_PLANKS);
+                h.setBlock(new BlockPos(9, Y0 + step, z), Blocks.OAK_PLANKS);
+            }
+        // gaps in the lowest row (chains for hanging lanterns) must not turn the roof ends into staircases
+        h.setBlock(new BlockPos(4, Y0, 2), Blocks.CHAIN);
+        h.setBlock(new BlockPos(7, Y0, 2), Blocks.CHAIN);
+        ResolvedSelection sel = new Selection.Box(h.absolutePos(new BlockPos(1, Y0, 1)), h.absolutePos(new BlockPos(10, Y0 + 4, 12))).resolve(h.getLevel(), 10_000);
+        List<Suggestion> all = DetailPlanner.find(h.getLevel(), sel, 1);
+        List<String> stairs = all.stream().filter(s -> s.rule().equals("stairs")).map(s -> s.anchor().subtract(h.absolutePos(BlockPos.ZERO)).toShortString()).toList();
+        h.assertTrue(stairs.isEmpty(), "roof slopes are not staircases: " + stairs);
+        h.succeed();
+    }
+
+    @GameTest(template = T)
     public static void nearClick(GameTestHelper h) {
         house(h, Blocks.OAK_PLANKS, Blocks.OAK_STAIRS, Blocks.OAK_DOOR);
         List<Suggestion> near = DetailPlanner.near(h.getLevel(), h.absolutePos(new BlockPos(7, Y0 + 2, 7)), 5);

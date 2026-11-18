@@ -111,6 +111,7 @@ public final class InteriorController {
     public static void confirm() {
         if (!previewing) return;
         PacketDistributor.sendToServer(new InteriorRequest(ClientState.nextRequestId(), clicked, face, type().id(), seed, false));
+        ClientState.actionbar(Component.translatable("stilwerk.interior.placed", Component.translatable(type().translationKey())));
         stop();
     }
 
@@ -122,6 +123,10 @@ public final class InteriorController {
 
     public static @Nullable BoundingBox roomBounds() {
         return previewing && room != null ? room.bounds() : null;
+    }
+
+    public static void renderEntities(com.mojang.blaze3d.vertex.PoseStack pose, Vec3 camera, float partialTick) {
+        if (mesh != null && previewing) mesh.drawEntities(pose, camera, anchor, partialTick);
     }
 
     public static void render(Matrix4f modelView, Matrix4f projection, Vec3 camera) {

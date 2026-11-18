@@ -169,6 +169,10 @@ public final class PlacementController {
                 origin.getX() + s.getX() - 1, origin.getY() + s.getY() - 1, origin.getZ() + s.getZ() - 1);
     }
 
+    public static void renderEntities(com.mojang.blaze3d.vertex.PoseStack pose, Vec3 camera, float partialTick) {
+        if (mesh != null && showGhost) mesh.drawEntities(pose, camera, origin, partialTick);
+    }
+
     public static void render(Matrix4f modelView, Matrix4f projection, Vec3 camera) {
         if (mesh != null && showGhost) mesh.draw(modelView, projection, camera, origin);
     }

@@ -155,6 +155,10 @@ public final class DetailController {
         return active() ? list.get(index).area() : null;
     }
 
+    public static void renderEntities(com.mojang.blaze3d.vertex.PoseStack pose, Vec3 camera, float partialTick) {
+        if (mesh != null) mesh.drawEntities(pose, camera, meshAnchor, partialTick);
+    }
+
     public static void render(Matrix4f modelView, Matrix4f projection, Vec3 camera) {
         if (mesh != null) mesh.draw(modelView, projection, camera, meshAnchor);
     }

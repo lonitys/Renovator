@@ -99,6 +99,7 @@
   "stilwerk.interior.open": "Der Raum ist nicht geschlossen oder zu groß (max. 24×12×24)",
   "stilwerk.interior.open_at": "Raum nicht geschlossen oder zu groß – Lücke bei %s, %s, %s",
   "stilwerk.interior.pick": "Wie soll der Raum eingerichtet werden?",
+  "stilwerk.interior.placed": "%s wird eingerichtet …",
   "stilwerk.interior.title": "Innenausstatter",
   "stilwerk.interior.type.auto": "Automatisch",
   "stilwerk.interior.type.bath": "Bad",

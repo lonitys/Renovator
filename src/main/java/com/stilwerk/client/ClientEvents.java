@@ -108,6 +108,11 @@ public final class ClientEvents {
             PlacementController.render(e.getModelViewMatrix(), e.getProjectionMatrix(), cam);
             DetailController.render(e.getModelViewMatrix(), e.getProjectionMatrix(), cam);
             InteriorController.render(e.getModelViewMatrix(), e.getProjectionMatrix(), cam);
+            float pt = e.getPartialTick().getGameTimeDeltaPartialTick(false);
+            PreviewController.renderEntities(e.getPoseStack(), cam, pt);
+            PlacementController.renderEntities(e.getPoseStack(), cam, pt);
+            DetailController.renderEntities(e.getPoseStack(), cam, pt);
+            InteriorController.renderEntities(e.getPoseStack(), cam, pt);
             if (!WandClient.holdingWand() && !PreviewController.active() && !PlacementController.active() && !DetailController.active()) return;
             MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
             VertexConsumer lines = buffers.getBuffer(RenderType.lines());

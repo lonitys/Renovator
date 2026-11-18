@@ -46,6 +46,26 @@ public final class InteriorScreen extends StilwerkScreen {
         addRenderableWidget(Button.builder(Component.translatable("gui.cancel"), b -> onClose()).bounds(x + 8, y + h - 26, w - 16, 20).build());
     }
 
+    /** Windows = connected groups of glass blocks. */
+    private int windowCount() {
+        java.util.Set<net.minecraft.core.BlockPos> left = new java.util.HashSet<>(room.windows());
+        int n = 0;
+        while (!left.isEmpty()) {
+            n++;
+            java.util.ArrayDeque<net.minecraft.core.BlockPos> q = new java.util.ArrayDeque<>();
+            net.minecraft.core.BlockPos first = left.iterator().next();
+            left.remove(first);
+            q.add(first);
+            while (!q.isEmpty()) {
+                net.minecraft.core.BlockPos c = q.poll();
+                for (net.minecraft.core.Direction d : net.minecraft.core.Direction.values()) {
+                    if (left.remove(c.relative(d))) q.add(c.relative(d));
+                }
+            }
+        }
+        return n;
+    }
+
     @Override
     public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
         super.render(g, mouseX, mouseY, partialTick);
@@ -53,7 +73,7 @@ public final class InteriorScreen extends StilwerkScreen {
         int maxH = 0;
         for (long k : room.floor()) maxH = Math.max(maxH, room.height(k));
         g.drawString(font, Component.translatable("stilwerk.interior.info", room.width(), room.depth(), maxH, room.floor().size(),
-                room.doors().size(), room.windows().size()), panelX + 8, panelY + 22, 0xFFB8C4CE);
+                room.doors().size(), windowCount()), panelX + 8, panelY + 22, 0xFFB8C4CE);
         List<String> mods = ModuleLibrary.furnitureMods();
         Component modLine = mods.isEmpty() ? Component.translatable("stilwerk.interior.vanilla")
                 : Component.translatable("stilwerk.interior.mods", String.join(", ", mods));

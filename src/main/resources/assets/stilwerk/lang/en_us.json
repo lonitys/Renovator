@@ -99,6 +99,7 @@
   "stilwerk.interior.open": "The room is not closed or too large (max 24×12×24)",
   "stilwerk.interior.open_at": "Room not closed or too large – gap at %s, %s, %s",
   "stilwerk.interior.pick": "How should the room be furnished?",
+  "stilwerk.interior.placed": "Furnishing the %s …",
   "stilwerk.interior.title": "Interior designer",
   "stilwerk.interior.type.auto": "Automatic",
   "stilwerk.interior.type.bath": "Bathroom",

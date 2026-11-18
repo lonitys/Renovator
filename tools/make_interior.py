@@ -188,7 +188,8 @@ recipes = [
         slot("lamp", 0, 1, 40, "corner"), slot("plant", 1, 3, 30, "corner")]},
     {"id": "kitchen", "rug": False, "light": True, "slots": [
         slot("stove", 1, 1, 100, "near_wall"), slot("kitchen_sink", 1, 1, 95, "near_window"), slot("fridge", 0, 1, 90, "near_wall"),
-        slot("kitchen_counter", 1, 3, 85, "near_wall"), slot("dining_small", 0, 1, 40, "centre"), slot("plant", 0, 1, 10, "corner")]},
+        slot("kitchen_counter", 2, 4, 85, "near_wall"), slot("storage", 0, 1, 50, "near_wall"), slot("dining_small", 0, 1, 40, "centre"),
+        slot("plant", 0, 1, 10, "corner")]},
     {"id": "dining", "rug": False, "light": True, "slots": [
         slot("dining", 1, 1, 100, "centre"), slot("storage", 0, 2, 50, "near_wall"), slot("shelf", 0, 1, 40, "near_wall"),
         slot("plant", 1, 3, 20, "corner")]},

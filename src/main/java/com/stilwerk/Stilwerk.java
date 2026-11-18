@@ -31,7 +31,10 @@ public final class Stilwerk {
         modBus.addListener(Stilwerk::creativeTab);
         container.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
         container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
-        NeoForge.EVENT_BUS.addListener((AddReloadListenerEvent e) -> e.addListener(new FamilyOverrides()));
+        NeoForge.EVENT_BUS.addListener((AddReloadListenerEvent e) -> {
+            e.addListener(new FamilyOverrides());
+            e.addListener(new com.stilwerk.swap.Templates.Loader());
+        });
     }
 
     public static ResourceLocation id(String path) {

@@ -1,6 +1,7 @@
 package com.renovator.net;
 
 import com.renovator.Renovator;
+import com.renovator.projection.ProjectionOps;
 import com.renovator.net.SmallPayloads.BlueprintChunk;
 import com.renovator.net.SmallPayloads.ConfirmRequest;
 import com.renovator.net.SmallPayloads.MaterialReport;
@@ -22,6 +23,8 @@ public final class Net {
     private Net() {}
 
     public static Consumer<MaterialReport> clientReportHandler = r -> {};
+    public static Consumer<ProjectionPayloads.Sync> clientProjectionSync = r -> {};
+    public static Consumer<ProjectionPayloads.Removed> clientProjectionRemoved = r -> {};
 
     @EventBusSubscriber(modid = Renovator.MODID, bus = EventBusSubscriber.Bus.MOD)
     public static final class Registration {
@@ -46,6 +49,16 @@ public final class Net {
                     (p, ctx) -> ctx.enqueueWork(() -> ServerOps.undo((ServerPlayer) ctx.player())));
             r.playToClient(MaterialReport.TYPE, MaterialReport.STREAM_CODEC,
                     (p, ctx) -> ctx.enqueueWork(() -> clientReportHandler.accept(p)));
+            r.playToServer(ProjectionPayloads.Place.TYPE, ProjectionPayloads.Place.STREAM_CODEC,
+                    (p, ctx) -> ctx.enqueueWork(() -> ProjectionOps.place((ServerPlayer) ctx.player(), p)));
+            r.playToServer(ProjectionPayloads.Build.TYPE, ProjectionPayloads.Build.STREAM_CODEC,
+                    (p, ctx) -> ctx.enqueueWork(() -> ProjectionOps.build((ServerPlayer) ctx.player(), p)));
+            r.playToServer(ProjectionPayloads.ProjAction.TYPE, ProjectionPayloads.ProjAction.STREAM_CODEC,
+                    (p, ctx) -> ctx.enqueueWork(() -> ProjectionOps.action((ServerPlayer) ctx.player(), p)));
+            r.playToClient(ProjectionPayloads.Sync.TYPE, ProjectionPayloads.Sync.STREAM_CODEC,
+                    (p, ctx) -> ctx.enqueueWork(() -> clientProjectionSync.accept(p)));
+            r.playToClient(ProjectionPayloads.Removed.TYPE, ProjectionPayloads.Removed.STREAM_CODEC,
+                    (p, ctx) -> ctx.enqueueWork(() -> clientProjectionRemoved.accept(p)));
             r.playToClient(TemplatesSync.TYPE, TemplatesSync.STREAM_CODEC,
                     (p, ctx) -> ctx.enqueueWork(() -> Templates.setDatapack(p.templates())));
         }
@@ -59,6 +72,11 @@ public final class Net {
         public static void datapackSync(OnDatapackSyncEvent e) {
             TemplatesSync sync = new TemplatesSync(Templates.datapack());
             e.getRelevantPlayers().forEach(p -> PacketDistributor.sendToPlayer(p, sync));
+        }
+
+        @SubscribeEvent
+        public static void loggedIn(PlayerEvent.PlayerLoggedInEvent e) {
+            if (e.getEntity() instanceof ServerPlayer p) ProjectionOps.syncAll(p);
         }
 
         @SubscribeEvent

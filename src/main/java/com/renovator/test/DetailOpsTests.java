@@ -35,7 +35,7 @@ public final class DetailOpsTests {
                 .filter(s -> s.rule().equals("window")).findFirst().orElseThrow();
         FakePlayer p = TestPlayers.player(h, GameType.CREATIVE);
         ServerOps.detail(p, new DetailRequest(1, Optional.of(sel(h)), Optional.empty(), 9,
-                List.of(new Choice("window", window.anchor(), 1)), false));
+                List.of(new Choice("window", window.anchor(), 1)), com.renovator.net.BuildMode.ASK));
         h.succeedWhen(() -> h.assertBlockPresent(Blocks.OAK_STAIRS, new BlockPos(3, Y0 + 3, 8)));
     }
 
@@ -47,7 +47,7 @@ public final class DetailOpsTests {
                 .filter(s -> s.rule().equals("entrance")).findFirst().orElseThrow();
         FakePlayer p = TestPlayers.player(h, GameType.CREATIVE);
         ServerOps.detail(p, new DetailRequest(2, Optional.empty(), Optional.of(clicked), 4,
-                List.of(new Choice("entrance", entrance.anchor(), 1)), false));
+                List.of(new Choice("entrance", entrance.anchor(), 1)), com.renovator.net.BuildMode.ASK));
         h.succeedWhen(() -> h.assertBlockPresent(Blocks.OAK_SLAB, new BlockPos(5, Y0 + 3, 8)));
     }
 
@@ -58,7 +58,7 @@ public final class DetailOpsTests {
                 .filter(s -> s.rule().equals("window")).findFirst().orElseThrow();
         FakePlayer p = TestPlayers.survival(h);
         ServerOps.detail(p, new DetailRequest(3, Optional.of(sel(h)), Optional.empty(), 9,
-                List.of(new Choice("window", window.anchor(), 0)), false));
+                List.of(new Choice("window", window.anchor(), 0)), com.renovator.net.BuildMode.ASK));
         h.assertTrue(ServerOps.pendingForTests().containsKey(p.getUUID()), "material report pending");
         h.succeed();
     }

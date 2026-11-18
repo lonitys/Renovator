@@ -66,6 +66,11 @@ public final class ClientState {
         }
     }
 
+    /** Shift held while confirming: keep it as a projection instead of building. */
+    public static com.renovator.net.BuildMode buildMode() {
+        return net.minecraft.client.gui.screens.Screen.hasShiftDown() ? com.renovator.net.BuildMode.PROJECTION : com.renovator.net.BuildMode.ASK;
+    }
+
     public static void setFlood(BlockPos start) {
         cornerA = cornerB = null;
         nextIsB = false;

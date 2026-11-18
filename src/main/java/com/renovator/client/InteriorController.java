@@ -123,7 +123,7 @@ public final class InteriorController {
 
     public static void confirm() {
         if (!previewing) return;
-        PacketDistributor.sendToServer(new InteriorRequest(ClientState.nextRequestId(), clicked, face, type().id(), seed, furniture(), false));
+        PacketDistributor.sendToServer(new InteriorRequest(ClientState.nextRequestId(), clicked, face, type().id(), seed, furniture(), ClientState.buildMode()));
         ClientState.actionbar(Component.translatable("renovator.interior.placed", Component.translatable(type().translationKey())));
         stop();
     }

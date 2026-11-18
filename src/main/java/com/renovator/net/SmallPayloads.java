@@ -31,11 +31,19 @@ public final class SmallPayloads {
         }
     }
 
-    /** Client → server: answer to a material report (proceed with as much as is affordable, or cancel). */
-    public record ConfirmRequest(int id, boolean proceed) implements CustomPacketPayload {
+    /** The answer to the build dialog. */
+    public enum ConfirmAction {
+        CANCEL, BUILD, PROJECT;
+
+        public static final StreamCodec<io.netty.buffer.ByteBuf, ConfirmAction> STREAM_CODEC =
+                ByteBufCodecs.VAR_INT.map(i -> values()[Math.floorMod(i, values().length)], Enum::ordinal);
+    }
+
+    /** Client → server: answer to the build dialog (build as far as affordable, keep as projection, or cancel). */
+    public record ConfirmRequest(int id, ConfirmAction action) implements CustomPacketPayload {
         public static final Type<ConfirmRequest> TYPE = new Type<>(Renovator.id("confirm"));
         public static final StreamCodec<RegistryFriendlyByteBuf, ConfirmRequest> STREAM_CODEC = StreamCodec.composite(
-                ByteBufCodecs.VAR_INT, ConfirmRequest::id, ByteBufCodecs.BOOL, ConfirmRequest::proceed, ConfirmRequest::new);
+                ByteBufCodecs.VAR_INT, ConfirmRequest::id, ConfirmAction.STREAM_CODEC, ConfirmRequest::action, ConfirmRequest::new);
 
         @Override
         public Type<? extends CustomPacketPayload> type() {

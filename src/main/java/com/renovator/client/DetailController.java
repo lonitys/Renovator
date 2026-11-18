@@ -118,7 +118,7 @@ public final class DetailController {
     }
 
     private static void send(List<Choice> choices) {
-        PacketDistributor.sendToServer(new DetailRequest(ClientState.nextRequestId(), selection, clicked, seed, choices, false));
+        PacketDistributor.sendToServer(new DetailRequest(ClientState.nextRequestId(), selection, clicked, seed, choices, ClientState.buildMode()));
     }
 
     public static void stop() {

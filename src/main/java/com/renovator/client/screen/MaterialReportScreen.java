@@ -1,5 +1,6 @@
 package com.renovator.client.screen;
 
+import com.renovator.net.SmallPayloads.ConfirmAction;
 import com.renovator.net.SmallPayloads.ConfirmRequest;
 import com.renovator.net.SmallPayloads.Line;
 import com.renovator.net.SmallPayloads.MaterialReport;
@@ -7,18 +8,22 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/** Survival: what the operation needs, what the player has, what is missing. Cancel or do as much as possible. */
+/**
+ * Survival build dialog: what the operation needs, what the player has, what is missing. Build (everything, or as
+ * far as it goes), keep it as a projection to build by hand / layer by layer, or cancel.
+ */
 public final class MaterialReportScreen extends RenovatorScreen {
     private final MaterialReport report;
     private boolean answered;
 
     public MaterialReportScreen(MaterialReport report) {
-        super(Component.translatable("renovator.report.title"), null);
+        super(Component.translatable(report.complete() ? "renovator.report.title_ready" : "renovator.report.title"), null);
         this.report = report;
     }
 
@@ -32,20 +37,26 @@ public final class MaterialReportScreen extends RenovatorScreen {
         for (Line l : report.lines()) rows.add(new Row(l));
         list.setAll(rows);
         addRenderableWidget(list);
-        int bw = (w - 20) / 2;
-        addRenderableWidget(Button.builder(Component.translatable("gui.cancel"), b -> answer(false)).bounds(x + 8, y + h - 26, bw, 20).build());
-        addRenderableWidget(Button.builder(Component.translatable("renovator.report.partial"), b -> answer(true)).bounds(x + 12 + bw, y + h - 26, bw, 20).build());
+        int bw = (w - 24) / 3;
+        addRenderableWidget(Button.builder(Component.translatable("gui.cancel"), b -> answer(ConfirmAction.CANCEL))
+                .bounds(x + 8, y + h - 26, bw, 20).build());
+        Button project = Button.builder(Component.translatable("renovator.report.project"), b -> answer(ConfirmAction.PROJECT))
+                .bounds(x + 12 + bw, y + h - 26, bw, 20).build();
+        project.setTooltip(Tooltip.create(Component.translatable("renovator.report.project_tip")));
+        addRenderableWidget(project);
+        addRenderableWidget(Button.builder(Component.translatable(report.complete() ? "renovator.report.build" : "renovator.report.partial"),
+                b -> answer(ConfirmAction.BUILD)).bounds(x + 16 + 2 * bw, y + h - 26, bw, 20).build());
     }
 
-    private void answer(boolean proceed) {
+    private void answer(ConfirmAction action) {
         answered = true;
-        PacketDistributor.sendToServer(new ConfirmRequest(report.id(), proceed));
+        PacketDistributor.sendToServer(new ConfirmRequest(report.id(), action));
         minecraft.setScreen(null);
     }
 
     @Override
     public void onClose() {
-        if (!answered) answer(false);
+        if (!answered) answer(ConfirmAction.CANCEL);
         else super.onClose();
     }
 

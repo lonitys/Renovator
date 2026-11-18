@@ -38,7 +38,7 @@ public final class ServerOps {
     /** How far from the player an operation may reach. */
     public static final int MAX_DISTANCE = 256;
 
-    public record Pending(int id, ServerLevel level, ChangeSet set, MaterialLedger ledger) {}
+    public record Pending(int id, ServerLevel level, ChangeSet set, MaterialLedger ledger, String labelKey, String labelArg) {}
 
     private static final Map<UUID, Pending> PENDING = new HashMap<>();
     private static final Map<UUID, String> LAST_MESSAGE = new HashMap<>();
@@ -51,7 +51,7 @@ public final class ServerOps {
         return LAST_MESSAGE.get(player);
     }
 
-    private static synchronized void tell(ServerPlayer p, String key, Object... args) {
+    public static synchronized void tell(ServerPlayer p, String key, Object... args) {
         LAST_MESSAGE.put(p.getUUID(), key);
         p.sendSystemMessage(Component.translatable(key, args));
     }
@@ -113,7 +113,7 @@ public final class ServerOps {
         }
         SwapPlanner.Result plan = SwapPlanner.plan(level, res, r.mapping(), mixes(r.mixes()), r.seed(),
                 new SwapPlanner.Options(r.includeNature(), !creative));
-        submit(p, level, plan.changes(), r.id(), r.partialOk(), centre(res.bounds()));
+        submit(p, level, plan.changes(), r.id(), r.mode(), centre(res.bounds()), "renovator.projection.label.swap", "");
     }
 
     public static void place(ServerPlayer p, PlaceRequest r) {
@@ -148,7 +148,7 @@ public final class ServerOps {
         BlueprintPlanner.Result plan = BlueprintPlanner.plan(level, t, r.origin(), r.mapping(), mixes(r.mixes()), r.seed(),
                 new BlueprintPlanner.Options(r.overwrite() && creative, !creative));
         if (plan.blocked() > 0) tell(p, "renovator.info.blocked", plan.blocked());
-        submit(p, level, plan.changes(), r.id(), r.partialOk(), centre(bb));
+        submit(p, level, plan.changes(), r.id(), r.mode(), centre(bb), "renovator.projection.label.blueprint", bp.meta().name());
     }
 
     /** Detail suggestions: recomputed here from the selection (or around the clicked block), chosen variants applied. */
@@ -197,7 +197,7 @@ public final class ServerOps {
             tell(p, "renovator.error.too_big", limit);
             return;
         }
-        submit(p, level, set, r.id(), r.partialOk(), centre(bb));
+        submit(p, level, set, r.id(), r.mode(), centre(bb), "renovator.projection.label.details", "");
     }
 
     /** Interior: the room is detected again here and furnished with the same type and seed as the client preview. */
@@ -226,16 +226,25 @@ public final class ServerOps {
             tell(p, "renovator.error.too_big", limit);
             return;
         }
-        submit(p, level, result.changes(), r.id(), r.partialOk(), room.start());
+        submit(p, level, result.changes(), r.id(), r.mode(), room.start(), "renovator.projection.label.interior", type.translationKey());
     }
 
     private static BlockPos centre(BoundingBox bb) {
         return new BlockPos((bb.minX() + bb.maxX()) / 2, bb.maxY() + 1, (bb.minZ() + bb.maxZ()) / 2);
     }
 
-    private static void submit(ServerPlayer p, ServerLevel level, ChangeSet set, int id, boolean partialOk, BlockPos centre) {
+    /**
+     * Planned changes: kept as a projection, built at once (creative, or {@link BuildMode#PARTIAL}), or - survival with
+     * {@link BuildMode#ASK} - held while the player answers the build dialog.
+     */
+    private static void submit(ServerPlayer p, ServerLevel level, ChangeSet set, int id, BuildMode mode, BlockPos centre,
+                               String labelKey, String labelArg) {
         if (set.isEmpty()) {
             tell(p, "renovator.info.nothing");
+            return;
+        }
+        if (mode == BuildMode.PROJECTION) {
+            com.renovator.projection.ProjectionOps.create(p, level, set, labelKey, labelArg);
             return;
         }
         if (p.isCreative()) {
@@ -243,18 +252,18 @@ public final class ServerOps {
             return;
         }
         MaterialLedger ledger = new MaterialLedger(p, centre, ServerConfig.useProjectE());
-        MaterialLedger.Report report = ledger.check(set);
-        if (report.complete() || partialOk) {
+        if (mode == BuildMode.PARTIAL) {
             run(p, level, set, ledger);
             return;
         }
+        MaterialLedger.Report report = ledger.check(set);
         synchronized (ServerOps.class) {
-            PENDING.put(p.getUUID(), new Pending(id, level, set, ledger));
+            PENDING.put(p.getUUID(), new Pending(id, level, set, ledger, labelKey, labelArg));
         }
         List<Line> lines = new ArrayList<>();
         for (MaterialLedger.Line l : report.lines()) lines.add(new Line(l.item(), l.need(), l.inInventory(), l.missing(), l.viaEmc()));
-        PacketDistributor.sendToPlayer(p, new MaterialReport(id, lines, false));
-        tell(p, "renovator.info.missing_materials");
+        PacketDistributor.sendToPlayer(p, new MaterialReport(id, lines, report.complete()));
+        if (!report.complete()) tell(p, "renovator.info.missing_materials");
     }
 
     public static void confirm(ServerPlayer p, ConfirmRequest r) {
@@ -264,15 +273,17 @@ public final class ServerOps {
             if (pending == null || pending.id() != r.id()) return;
             PENDING.remove(p.getUUID());
         }
-        if (!r.proceed()) {
-            tell(p, "renovator.info.cancelled");
-            return;
+        switch (r.action()) {
+            case CANCEL -> tell(p, "renovator.info.cancelled");
+            case PROJECT -> com.renovator.projection.ProjectionOps.create(p, pending.level(), pending.set(), pending.labelKey(), pending.labelArg());
+            case BUILD -> {
+                if (Applier.busy(p.getUUID())) {
+                    tell(p, "renovator.error.busy");
+                    return;
+                }
+                run(p, pending.level(), pending.set(), pending.ledger());
+            }
         }
-        if (Applier.busy(p.getUUID())) {
-            tell(p, "renovator.error.busy");
-            return;
-        }
-        run(p, pending.level(), pending.set(), pending.ledger());
     }
 
     private static void run(ServerPlayer p, ServerLevel level, ChangeSet set, Gate gate) {

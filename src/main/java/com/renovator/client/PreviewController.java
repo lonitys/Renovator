@@ -89,14 +89,14 @@ public final class PreviewController {
     public static void confirm() {
         if (!active() || selection == null) return;
         PacketDistributor.sendToServer(new SwapRequest(ClientState.nextRequestId(), selection, mapping, usedMixes(mapping, mixes),
-                seed, includeNature, false));
+                seed, includeNature, ClientState.buildMode()));
         cancel();
     }
 
     /** Sends the swap without a preview (swap screen "Apply"). */
     public static void applyDirect(Selection sel, SwapMapping m, Map<String, MixPalette> mx, long sd, boolean nature) {
         cancel();
-        PacketDistributor.sendToServer(new SwapRequest(ClientState.nextRequestId(), sel, m, usedMixes(m, mx), sd, nature, false));
+        PacketDistributor.sendToServer(new SwapRequest(ClientState.nextRequestId(), sel, m, usedMixes(m, mx), sd, nature, ClientState.buildMode()));
     }
 
     public static List<MixPalette> usedMixes(SwapMapping m, Map<String, MixPalette> mx) {

@@ -194,7 +194,7 @@ public final class PlacementController {
             PacketDistributor.sendToServer(new BlueprintChunk(uploadId, i, total, part));
         }
         PacketDistributor.sendToServer(new PlaceRequest(ClientState.nextRequestId(), hash, origin, rotation, mirror, mapping,
-                PreviewController.usedMixes(mapping, mixes), seed, overwrite, false));
+                PreviewController.usedMixes(mapping, mixes), seed, overwrite, ClientState.buildMode()));
         String name = original.meta().name();
         stop();
         ClientState.actionbar(Component.translatable("renovator.place.placed", name));

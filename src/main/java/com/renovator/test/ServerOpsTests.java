@@ -33,7 +33,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 public final class ServerOpsTests {
     private static final String T = RenovatorGameTests.T;
     private static final int Y = SwapTests.Y;
-    private static final SwapMapping OAK_TO_SPRUCE = SwapMapping.EMPTY.with(ResourceLocation.withDefaultNamespace("oak"),
+    static final SwapMapping OAK_TO_SPRUCE = SwapMapping.EMPTY.with(ResourceLocation.withDefaultNamespace("oak"),
             Target.family(ResourceLocation.withDefaultNamespace("spruce")));
 
     static Selection box(GameTestHelper h) {
@@ -44,7 +44,7 @@ public final class ServerOpsTests {
     public static void creativeSwapAndUndo(GameTestHelper h) {
         SwapTests.oakParts(h);
         FakePlayer p = TestPlayers.player(h, GameType.CREATIVE);
-        ServerOps.swap(p, new SwapRequest(1, box(h), OAK_TO_SPRUCE, List.of(), 3, false, false));
+        ServerOps.swap(p, new SwapRequest(1, box(h), OAK_TO_SPRUCE, List.of(), 3, false, com.renovator.net.BuildMode.ASK));
         h.startSequence()
                 .thenWaitUntil(() -> h.assertBlockPresent(Blocks.SPRUCE_PLANKS, new BlockPos(1, Y, 1)))
                 .thenWaitUntil(() -> h.assertTrue(UndoHistory.depth(h.getLevel().getServer(), p.getUUID()) == 1, "undo recorded"))
@@ -58,10 +58,10 @@ public final class ServerOpsTests {
     public static void survivalNeedsMaterials(GameTestHelper h) {
         SwapTests.oakParts(h);
         FakePlayer p = TestPlayers.survival(h);
-        ServerOps.swap(p, new SwapRequest(5, box(h), OAK_TO_SPRUCE, List.of(), 3, false, false));
+        ServerOps.swap(p, new SwapRequest(5, box(h), OAK_TO_SPRUCE, List.of(), 3, false, com.renovator.net.BuildMode.ASK));
         h.assertTrue(ServerOps.pendingForTests().containsKey(p.getUUID()), "pending report without materials");
         TestPlayers.give(p, Items.SPRUCE_PLANKS, 4);
-        ServerOps.confirm(p, new SmallPayloads.ConfirmRequest(5, true));
+        ServerOps.confirm(p, new SmallPayloads.ConfirmRequest(5, SmallPayloads.ConfirmAction.BUILD));
         h.startSequence()
                 .thenWaitUntil(() -> h.assertBlockPresent(Blocks.SPRUCE_PLANKS, new BlockPos(4, Y, 1)))
                 .thenExecute(() -> {
@@ -78,7 +78,7 @@ public final class ServerOpsTests {
         Selection huge = new Selection.Box(h.absolutePos(new BlockPos(0, Y, 0)), h.absolutePos(new BlockPos(40, Y + 40, 40)));
         ServerConfig.maxBlocksOverride = 20_000;
         try {
-            ServerOps.swap(p, new SwapRequest(9, huge, OAK_TO_SPRUCE, List.of(), 1, false, false));
+            ServerOps.swap(p, new SwapRequest(9, huge, OAK_TO_SPRUCE, List.of(), 1, false, com.renovator.net.BuildMode.ASK));
         } finally {
             ServerConfig.maxBlocksOverride = -1;
         }
@@ -93,7 +93,7 @@ public final class ServerOpsTests {
                 "no block limit: survival " + ServerConfig.maxBlocks(false) + ", creative " + ServerConfig.maxBlocks(true));
         FakePlayer p = TestPlayers.survival(h);
         Selection big = new Selection.Box(h.absolutePos(new BlockPos(0, Y, 0)), h.absolutePos(new BlockPos(40, Y + 40, 40)));
-        ServerOps.swap(p, new SwapRequest(10, big, OAK_TO_SPRUCE, List.of(), 1, false, false));
+        ServerOps.swap(p, new SwapRequest(10, big, OAK_TO_SPRUCE, List.of(), 1, false, com.renovator.net.BuildMode.ASK));
         h.assertFalse("renovator.error.too_big".equals(ServerOps.lastMessageForTests(p.getUUID())), "68 921 blocks are not too big");
         h.succeed();
     }
@@ -110,7 +110,7 @@ public final class ServerOpsTests {
         }
         h.assertTrue(UploadBuffer.get(p, bp.sha1()) != null, "assembled from " + total + " chunks");
         ServerOps.place(p, new PlaceRequest(2, bp.sha1(), h.absolutePos(new BlockPos(9, Y, 9)), Rotation.NONE, Mirror.NONE,
-                SwapMapping.EMPTY, List.of(), 1, false, false));
+                SwapMapping.EMPTY, List.of(), 1, false, com.renovator.net.BuildMode.ASK));
         h.succeedWhen(() -> {
             h.assertBlockPresent(Blocks.OAK_PLANKS, new BlockPos(9, Y, 9));
             h.assertBlockPresent(Blocks.STONE_BRICKS, new BlockPos(9, Y + 1, 9));

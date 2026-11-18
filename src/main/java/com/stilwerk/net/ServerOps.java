@@ -151,6 +151,54 @@ public final class ServerOps {
         submit(p, level, plan.changes(), r.id(), r.partialOk(), centre(bb));
     }
 
+    /** Detail suggestions: recomputed here from the selection (or around the clicked block), chosen variants applied. */
+    public static void detail(ServerPlayer p, DetailRequest r) {
+        if (Applier.busy(p.getUUID())) {
+            tell(p, "stilwerk.error.busy");
+            return;
+        }
+        boolean creative = p.isCreative();
+        int limit = ServerConfig.maxBlocks(creative);
+        ServerLevel level = p.serverLevel();
+        java.util.List<com.stilwerk.detail.DetailTypes.Suggestion> all;
+        BoundingBox bb;
+        if (r.selection().isPresent()) {
+            Selection sel = r.selection().get();
+            if (sel instanceof Selection.Flood f && f.radius() > ServerConfig.floodRadius()) sel = new Selection.Flood(f.start(), ServerConfig.floodRadius());
+            BoundingBox rough = sel.roughBounds();
+            if (sel instanceof Selection.Box && (long) rough.getXSpan() * rough.getYSpan() * rough.getZSpan() > limit) {
+                tell(p, "stilwerk.error.too_big", limit);
+                return;
+            }
+            if (!nearby(p, rough) || !loaded(level, rough.inflatedBy(2))) {
+                tell(p, "stilwerk.error.unloaded");
+                return;
+            }
+            ResolvedSelection res = sel.resolve(level, limit);
+            if (res.truncated()) {
+                tell(p, "stilwerk.error.too_big", limit);
+                return;
+            }
+            bb = res.bounds();
+            all = com.stilwerk.detail.DetailPlanner.find(level, res, r.seed());
+        } else if (r.clicked().isPresent()) {
+            bb = com.stilwerk.detail.DetailPlanner.nearSelection(r.clicked().get()).roughBounds();
+            if (!nearby(p, bb) || !loaded(level, bb.inflatedBy(2))) {
+                tell(p, "stilwerk.error.unloaded");
+                return;
+            }
+            all = com.stilwerk.detail.DetailPlanner.near(level, r.clicked().get(), r.seed());
+        } else {
+            return;
+        }
+        ChangeSet set = com.stilwerk.detail.DetailPlanner.combine(all, r.choices());
+        if (set.size() > limit) {
+            tell(p, "stilwerk.error.too_big", limit);
+            return;
+        }
+        submit(p, level, set, r.id(), r.partialOk(), centre(bb));
+    }
+
     private static BlockPos centre(BoundingBox bb) {
         return new BlockPos((bb.minX() + bb.maxX()) / 2, bb.maxY() + 1, (bb.minZ() + bb.maxZ()) / 2);
     }

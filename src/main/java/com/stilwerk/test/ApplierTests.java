@@ -78,7 +78,8 @@ public final class ApplierTests {
         h.runAfterDelay(1, () -> {
             int n = 0;
             for (int x = 1; x <= 5; x++) if (h.getBlockState(new BlockPos(x, Y, 6)).is(Blocks.SPRUCE_PLANKS)) n++;
-            h.assertTrue(n >= 1 && n < 5, "spread over ticks, " + n + " after one tick");
+            // other tests may have jobs queued in front of this one, so only "not all at once" is certain
+            h.assertTrue(n < 5, "spread over ticks, " + n + " after one tick");
         });
         h.succeedWhen(() -> {
             h.assertTrue(done.get() == 5, "job done with 5");

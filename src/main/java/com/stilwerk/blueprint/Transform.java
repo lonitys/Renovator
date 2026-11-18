@@ -34,12 +34,29 @@ public final class Transform {
         return b.build();
     }
 
-    /** Mirrors and rotates a state; blocks whose facing cannot take every direction (some modded furniture) stay as they are. */
+    /**
+     * Mirrors and rotates a state. Some modded blocks do not turn themselves, or only allow two facings (a symmetric
+     * desk: north/east); their horizontal "facing" is then set here, using the opposite direction when the exact one
+     * does not exist.
+     */
     static net.minecraft.world.level.block.state.BlockState turn(net.minecraft.world.level.block.state.BlockState s, Rotation rot, Mirror mirror) {
+        net.minecraft.world.level.block.state.BlockState out;
         try {
-            return s.mirror(mirror).rotate(rot);
+            out = s.mirror(mirror).rotate(rot);
         } catch (RuntimeException e) {
-            return s;
+            out = s;
         }
+        for (net.minecraft.world.level.block.state.properties.Property<?> p : s.getProperties()) {
+            if (!p.getName().equals("facing") || !(s.getValue(p) instanceof net.minecraft.core.Direction from) || !from.getAxis().isHorizontal()) continue;
+            net.minecraft.core.Direction want = rot.rotate(mirror.mirror(from));
+            if (out.getValue(p) == want) break;
+            @SuppressWarnings("unchecked")
+            net.minecraft.world.level.block.state.properties.Property<net.minecraft.core.Direction> dp =
+                    (net.minecraft.world.level.block.state.properties.Property<net.minecraft.core.Direction>) p;
+            if (dp.getPossibleValues().contains(want)) out = out.setValue(dp, want);
+            else if (dp.getPossibleValues().contains(want.getOpposite())) out = out.setValue(dp, want.getOpposite());
+            break;
+        }
+        return out;
     }
 }

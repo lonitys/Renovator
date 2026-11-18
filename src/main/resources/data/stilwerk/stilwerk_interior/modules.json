@@ -205,7 +205,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_drawer[facing=south]"
+    "s": "mcwfurnitures:oak_drawer[facing=east]"
    },
    {
     "p": [
@@ -221,7 +221,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_drawer[facing=south]"
+    "s": "mcwfurnitures:oak_drawer[facing=east]"
    },
    {
     "p": [
@@ -269,7 +269,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:oak_drawer[facing=south]"
+    "s": "refurbished_furniture:oak_drawer[facing=north]"
    },
    {
     "p": [
@@ -285,7 +285,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:oak_drawer[facing=south]"
+    "s": "refurbished_furniture:oak_drawer[facing=north]"
    },
    {
     "p": [
@@ -363,7 +363,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_wardrobe[facing=south,connection=base,hinge=left]"
+    "s": "mcwfurnitures:oak_wardrobe[facing=east,connection=base,hinge=left]"
    },
    {
     "p": [
@@ -371,7 +371,7 @@
      1,
      0
     ],
-    "s": "mcwfurnitures:oak_wardrobe[facing=south,connection=top,hinge=left]"
+    "s": "mcwfurnitures:oak_wardrobe[facing=east,connection=top,hinge=left]"
    }
   ]
  },
@@ -395,7 +395,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:oak_storage_cabinet[facing=south]"
+    "s": "refurbished_furniture:oak_storage_cabinet[facing=north]"
    },
    {
     "p": [
@@ -403,7 +403,7 @@
      1,
      0
     ],
-    "s": "refurbished_furniture:oak_storage_cabinet[facing=south]"
+    "s": "refurbished_furniture:oak_storage_cabinet[facing=north]"
    }
   ]
  },
@@ -521,7 +521,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:oak_desk[facing=south]"
+    "s": "refurbished_furniture:oak_desk[facing=north]"
    },
    {
     "p": [
@@ -529,7 +529,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:oak_desk[facing=south]"
+    "s": "refurbished_furniture:oak_desk[facing=north]"
    },
    {
     "p": [
@@ -537,7 +537,7 @@
      1,
      0
     ],
-    "s": "refurbished_furniture:computer[facing=south]"
+    "s": "refurbished_furniture:computer[facing=north]"
    },
    {
     "p": [
@@ -545,7 +545,7 @@
      0,
      1
     ],
-    "s": "refurbished_furniture:oak_chair[facing=north]"
+    "s": "refurbished_furniture:oak_chair[facing=south]"
    }
   ]
  },
@@ -647,7 +647,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:COLOR_couch[facing=south]"
+    "s": "mcwfurnitures:COLOR_couch[facing=east]"
    },
    {
     "p": [
@@ -655,7 +655,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:COLOR_couch[facing=south]"
+    "s": "mcwfurnitures:COLOR_couch[facing=east]"
    },
    {
     "p": [
@@ -663,7 +663,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:COLOR_couch[facing=south]"
+    "s": "mcwfurnitures:COLOR_couch[facing=east]"
    },
    {
     "p": [
@@ -695,7 +695,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:COLOR_sofa[facing=south]"
+    "s": "refurbished_furniture:COLOR_sofa[facing=north]"
    },
    {
     "p": [
@@ -703,7 +703,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:COLOR_sofa[facing=south]"
+    "s": "refurbished_furniture:COLOR_sofa[facing=north]"
    },
    {
     "p": [
@@ -711,7 +711,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:COLOR_sofa[facing=south]"
+    "s": "refurbished_furniture:COLOR_sofa[facing=north]"
    },
    {
     "p": [
@@ -797,7 +797,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:oak_drawer[facing=south]"
+    "s": "refurbished_furniture:oak_drawer[facing=north]"
    },
    {
     "p": [
@@ -805,7 +805,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:oak_drawer[facing=south]"
+    "s": "refurbished_furniture:oak_drawer[facing=north]"
    },
    {
     "p": [
@@ -813,7 +813,7 @@
      1,
      0
     ],
-    "s": "refurbished_furniture:television[facing=south]"
+    "s": "refurbished_furniture:television[facing=north]"
    }
   ]
  },
@@ -1023,7 +1023,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_bookshelf[facing=south]"
+    "s": "mcwfurnitures:oak_bookshelf[facing=east]"
    },
    {
     "p": [
@@ -1031,7 +1031,7 @@
      1,
      0
     ],
-    "s": "mcwfurnitures:oak_bookshelf[facing=south]"
+    "s": "mcwfurnitures:oak_bookshelf[facing=east]"
    },
    {
     "p": [
@@ -1039,7 +1039,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_bookshelf[facing=south]"
+    "s": "mcwfurnitures:oak_bookshelf[facing=east]"
    },
    {
     "p": [
@@ -1047,7 +1047,7 @@
      1,
      0
     ],
-    "s": "mcwfurnitures:oak_bookshelf[facing=south]"
+    "s": "mcwfurnitures:oak_bookshelf[facing=east]"
    },
    {
     "p": [
@@ -1055,7 +1055,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_bookshelf[facing=south]"
+    "s": "mcwfurnitures:oak_bookshelf[facing=east]"
    },
    {
     "p": [
@@ -1063,7 +1063,7 @@
      1,
      0
     ],
-    "s": "mcwfurnitures:oak_bookshelf[facing=south]"
+    "s": "mcwfurnitures:oak_bookshelf[facing=east]"
    }
   ]
  },
@@ -1319,7 +1319,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_counter[facing=south]"
+    "s": "mcwfurnitures:oak_counter[facing=east]"
    },
    {
     "p": [
@@ -1327,7 +1327,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_counter[facing=south]"
+    "s": "mcwfurnitures:oak_counter[facing=east]"
    }
   ]
  },
@@ -1351,7 +1351,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_counter[facing=south]"
+    "s": "mcwfurnitures:oak_counter[facing=east]"
    },
    {
     "p": [
@@ -1359,7 +1359,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_counter[facing=south]"
+    "s": "mcwfurnitures:oak_counter[facing=east]"
    },
    {
     "p": [
@@ -1367,7 +1367,7 @@
      2,
      0
     ],
-    "s": "mcwfurnitures:oak_kitchen_cabinet[facing=south]"
+    "s": "mcwfurnitures:oak_kitchen_cabinet[facing=north]"
    },
    {
     "p": [
@@ -1375,7 +1375,7 @@
      2,
      0
     ],
-    "s": "mcwfurnitures:oak_kitchen_cabinet[facing=south]"
+    "s": "mcwfurnitures:oak_kitchen_cabinet[facing=north]"
    }
   ]
  },
@@ -1399,7 +1399,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:oak_kitchen_cabinetry[facing=south]"
+    "s": "refurbished_furniture:oak_kitchen_cabinetry[facing=north]"
    },
    {
     "p": [
@@ -1407,7 +1407,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:oak_kitchen_drawer[facing=south]"
+    "s": "refurbished_furniture:oak_kitchen_drawer[facing=north]"
    },
    {
     "p": [
@@ -1415,7 +1415,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:oak_kitchen_cabinetry[facing=south]"
+    "s": "refurbished_furniture:oak_kitchen_cabinetry[facing=north]"
    }
   ]
  },
@@ -1491,7 +1491,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:light_stove[facing=south]"
+    "s": "refurbished_furniture:light_stove[facing=north]"
    }
   ]
  },
@@ -1515,7 +1515,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:light_stove[facing=south]"
+    "s": "refurbished_furniture:light_stove[facing=north]"
    },
    {
     "p": [
@@ -1523,7 +1523,7 @@
      2,
      0
     ],
-    "s": "refurbished_furniture:light_range_hood[facing=south]"
+    "s": "refurbished_furniture:light_range_hood[facing=north]"
    }
   ]
  },
@@ -1569,7 +1569,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_kitchen_sink[facing=south]"
+    "s": "mcwfurnitures:oak_kitchen_sink[facing=north]"
    }
   ]
  },
@@ -1593,7 +1593,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:oak_kitchen_sink[facing=south]"
+    "s": "refurbished_furniture:oak_kitchen_sink[facing=north]"
    }
   ]
  },
@@ -1617,7 +1617,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:light_freezer[facing=south]"
+    "s": "refurbished_furniture:light_freezer[facing=north]"
    },
    {
     "p": [
@@ -1625,7 +1625,7 @@
      1,
      0
     ],
-    "s": "refurbished_furniture:light_fridge[facing=south]"
+    "s": "refurbished_furniture:light_fridge[facing=north]"
    }
   ]
  },
@@ -1935,7 +1935,7 @@
      0,
      1
     ],
-    "s": "refurbished_furniture:oak_chair[facing=east,tucked=false]"
+    "s": "refurbished_furniture:oak_chair[facing=west,tucked=false]"
    },
    {
     "p": [
@@ -1943,7 +1943,7 @@
      0,
      2
     ],
-    "s": "refurbished_furniture:oak_chair[facing=east,tucked=false]"
+    "s": "refurbished_furniture:oak_chair[facing=west,tucked=false]"
    },
    {
     "p": [
@@ -1951,7 +1951,7 @@
      0,
      1
     ],
-    "s": "refurbished_furniture:oak_chair[facing=west,tucked=false]"
+    "s": "refurbished_furniture:oak_chair[facing=east,tucked=false]"
    },
    {
     "p": [
@@ -1959,7 +1959,7 @@
      0,
      2
     ],
-    "s": "refurbished_furniture:oak_chair[facing=west,tucked=false]"
+    "s": "refurbished_furniture:oak_chair[facing=east,tucked=false]"
    },
    {
     "p": [
@@ -1967,7 +1967,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:oak_chair[facing=south,tucked=false]"
+    "s": "refurbished_furniture:oak_chair[facing=north,tucked=false]"
    },
    {
     "p": [
@@ -1975,7 +1975,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:oak_chair[facing=south,tucked=false]"
+    "s": "refurbished_furniture:oak_chair[facing=north,tucked=false]"
    },
    {
     "p": [
@@ -1983,7 +1983,7 @@
      0,
      3
     ],
-    "s": "refurbished_furniture:oak_chair[facing=north,tucked=false]"
+    "s": "refurbished_furniture:oak_chair[facing=south,tucked=false]"
    },
    {
     "p": [
@@ -1991,7 +1991,7 @@
      0,
      3
     ],
-    "s": "refurbished_furniture:oak_chair[facing=north,tucked=false]"
+    "s": "refurbished_furniture:oak_chair[facing=south,tucked=false]"
    }
   ]
  },
@@ -2207,7 +2207,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:white_toilet[facing=south]"
+    "s": "refurbished_furniture:white_toilet[facing=north]"
    }
   ]
  },
@@ -2253,7 +2253,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:white_basin[facing=south]"
+    "s": "refurbished_furniture:white_basin[facing=north]"
    }
   ]
  },
@@ -2353,7 +2353,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:workbench[facing=south]"
+    "s": "refurbished_furniture:workbench[facing=north]"
    },
    {
     "p": [
@@ -2499,7 +2499,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_drawer[facing=south]"
+    "s": "mcwfurnitures:oak_drawer[facing=east]"
    },
    {
     "p": [
@@ -2507,7 +2507,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_triple_drawer[facing=south]"
+    "s": "mcwfurnitures:oak_triple_drawer[facing=east]"
    }
   ]
  },

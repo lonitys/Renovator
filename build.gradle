@@ -29,7 +29,7 @@ neoForge {
             // Visual check: ./gradlew runClient -PquickPlay=<world in run/saves> [-PwithSodium=<sodium jar>]
             if (project.hasProperty('quickPlay')) {
                 programArguments.addAll('--quickPlaySingleplayer', project.property('quickPlay').toString())
-                systemProperty 'stilwerk.devScene', 'true'
+                systemProperty(project.hasProperty('probe') ? 'stilwerk.probe' : project.hasProperty('gallery') ? 'stilwerk.gallery' : 'stilwerk.devScene', 'true')
             }
         }
         server {

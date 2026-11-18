@@ -4,17 +4,53 @@ Modules are authored in oak with the token COLOR for dye colours. Front faces so
 the wall. Every category has a vanilla module; Macaw's Furniture (mcwfurnitures) and Refurbished Furniture
 (refurbished_furniture) modules are used instead when those mods are installed.
 
-Facing conventions:
+Facing conventions used when writing modules below:
   vanilla stairs: facing = side of the backrest (a chair facing north has its back to the north)
-  mod furniture:  facing = the side the front looks at (a chair at a desk to the north faces north)
+  mod furniture:  write facing = the side the FRONT should look at (a chair at a desk to the north: facing=north);
+                  mod() translates that into the block's real facing value with FRONT_RULE
   open trapdoor:  the panel lies on the side opposite to "facing"
+
+FRONT_RULE comes from the facing probe (test/FacingProbe, 2026-11-18): each block placed with all four facing
+values and photographed. "same": front looks at facing; "opposite": front looks away from facing;
+"cw": front looks 90 degrees clockwise of facing.
 """
 import json
+import re
 from pathlib import Path
 
 OUT = Path("src/main/resources/data/stilwerk/stilwerk_interior")
 MCW = "mcwfurnitures"
 RF = "refurbished_furniture"
+
+DIRS = ["north", "east", "south", "west"]
+
+# checked in order: first matching path fragment wins
+FRONT_RULE = [
+    (MCW, "kitchen_cabinet", "opposite"),
+    (MCW, "kitchen_sink", "opposite"),
+    (MCW, "chair", "same"),
+    (MCW, "desk", "same"),        # only north/east exist: the desk is symmetric front/back
+    (MCW, "", "cw"),              # drawers, wardrobes, bookshelves, counters, couches
+    (RF, "bath", "same"),         # two-part bath: facing points from the bottom to the head part
+    (RF, "", "opposite"),         # every other Refurbished block
+]
+
+
+def real_facing(state):
+    """Translate facing=<front> of a modded block into the block's own facing value."""
+    m = re.match(r"([a-z_]+):([a-zA-Z_]+)\[(.*)\]$", state)
+    if not m or m.group(1) not in (MCW, RF):
+        return state
+    ns, path, props = m.groups()
+    fm = re.search(r"facing=(north|east|south|west)", props)
+    if not fm:
+        return state
+    front = fm.group(1)
+    rule = next(r for n, frag, r in FRONT_RULE if n == ns and frag in path)
+    i = DIRS.index(front)
+    facing = {"same": front, "opposite": DIRS[(i + 2) % 4], "cw": DIRS[(i + 3) % 4]}[rule]
+    return state.replace(f"facing={front}", f"facing={facing}", 1)
+
 
 modules = []
 
@@ -26,7 +62,7 @@ def mod(mid, category, placement, size, cells, requires=(), weight=10):
     modules.append({
         "id": mid, "category": category, "placement": placement, "size": list(size),
         "requires": list(requires), "weight": weight,
-        "blocks": [{"p": [x, y, z], "s": s} for x, y, z, s in cells],
+        "blocks": [{"p": [x, y, z], "s": real_facing(s)} for x, y, z, s in cells],
     })
 
 

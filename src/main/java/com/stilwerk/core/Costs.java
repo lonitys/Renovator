@@ -25,7 +25,8 @@ public final class Costs {
 
     /** How many items one block of this state costs (0 for air and for the secondary half of two-block blocks). */
     public static int count(BlockState s) {
-        if (s.isAir() || item(s) == Items.AIR) return 0;
+        // replaceable blocks (grass, snow layer, water ...) vanish when built over and cost nothing to restore
+        if (s.isAir() || s.canBeReplaced() || item(s) == Items.AIR) return 0;
         if (!Groups.isPrimary(s)) return 0;
         if (s.hasProperty(SlabBlock.TYPE) && s.getValue(SlabBlock.TYPE) == SlabType.DOUBLE) return 2;
         for (IntegerProperty p : COUNTED) if (s.hasProperty(p)) return s.getValue(p);

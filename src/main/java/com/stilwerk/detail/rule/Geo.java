@@ -47,6 +47,17 @@ final class Geo {
         return m != null && m.shape() == Shape.FULL && v.state(p).isCollisionShapeFullBlock(v.level(), p);
     }
 
+    /** A full, opaque wall block (planks, bricks ...): not glass, not a door, not a log column. */
+    static boolean isWallBody(BuildingView v, BlockPos p) {
+        return isFull(v, p) && !isGlass(v.state(p));
+    }
+
+    /** Logs and wood blocks standing upright: already a pillar. */
+    static boolean isPillarBlock(BuildingView v, BlockPos p) {
+        FamilyIndex.Member m = v.member(p);
+        return m != null && (m.shape() == Shape.LOG || m.shape() == Shape.WOOD || m.shape() == Shape.STRIPPED_LOG || m.shape() == Shape.STRIPPED_WOOD);
+    }
+
     static boolean isGlass(BlockState s) {
         return s.is(Tags.Blocks.GLASS_BLOCKS) || s.is(Tags.Blocks.GLASS_PANES);
     }

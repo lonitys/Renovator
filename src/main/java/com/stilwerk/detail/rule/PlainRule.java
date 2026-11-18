@@ -47,7 +47,7 @@ public final class PlainRule implements DetailRule {
         Map<String, MixPalette> mixes = Mixes.builtIn().stream().collect(Collectors.toMap(MixPalette::id, m -> m));
         for (Walls.Plane pl : Walls.planes(v)) {
             Set<BlockPos> cells = new HashSet<>();
-            for (List<BlockPos> col : pl.columns().values()) for (BlockPos p : col) if (Geo.isFull(v, p)) cells.add(p);
+            for (List<BlockPos> col : pl.columns().values()) for (BlockPos p : col) if (Geo.isWallBody(v, p)) cells.add(p);
             Direction along = Direction.fromAxisAndDirection(pl.alongAxis(), Direction.AxisDirection.POSITIVE);
             Set<BlockPos> seen = new HashSet<>();
             List<BlockPos> ordered = cells.stream().sorted().toList();

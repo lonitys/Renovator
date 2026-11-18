@@ -36,18 +36,20 @@ public final class EntranceRule implements DetailRule {
             if (slab.hasProperty(SlabBlock.TYPE)) slab = slab.setValue(SlabBlock.TYPE, SlabType.TOP);
             BlockState top = slab;
             Suggestion sg = DetailTypes.suggestion(id(), p, List.of(
-                    ctx.variant(id(), "lanterns", e -> {
+                    ctx.variant(id(), "lanterns", e -> e.atomic(g -> {
+                        // both sides or none: a single lantern post next to a door looks misplaced
                         for (Direction sd : new Direction[]{side, side.getOpposite()}) {
                             BlockPos post = p.relative(sd).relative(d);
-                            if (e.put(post, ctx.mats().fence())) e.put(post.above(), Geo.hanging(Blocks.LANTERN.defaultBlockState(), false));
+                            g.put(post, ctx.mats().fence());
+                            g.put(post.above(), Geo.hanging(Blocks.LANTERN.defaultBlockState(), false));
                         }
-                    }),
-                    ctx.variant(id(), "awning", e -> {
+                    })),
+                    ctx.variant(id(), "awning", e -> e.atomic(g -> {
                         BlockPos c = p.above(2).relative(d);
-                        e.put(c, top);
-                        e.put(c.relative(side), top);
-                        e.put(c.relative(side.getOpposite()), top);
-                    }),
+                        g.put(c, top);
+                        g.put(c.relative(side), top);
+                        g.put(c.relative(side.getOpposite()), top);
+                    })),
                     ctx.variant(id(), "steps", e -> {
                         for (int k = 1; k <= 3; k++) {
                             BlockPos c = p.relative(d, k).below(k);

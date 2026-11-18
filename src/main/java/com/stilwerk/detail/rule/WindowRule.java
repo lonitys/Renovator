@@ -69,24 +69,26 @@ public final class WindowRule implements DetailRule {
             }
             BlockState leaves = Blocks.FLOWERING_AZALEA_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
             Suggestion sg = DetailTypes.suggestion(id(), start, List.of(
-                    ctx.variant(id(), "shutters", e -> {
+                    // each variant all or nothing: a window with one shutter or half a frame looks wrong
+                    ctx.variant(id(), "shutters", e -> e.atomic(g -> {
                         for (BlockPos[] r : rows.values()) {
-                            e.put(r[0].relative(plus.getOpposite()).relative(d), Geo.openTrapdoor(ctx.mats().trapdoor(), d.getOpposite()));
-                            e.put(r[1].relative(plus).relative(d), Geo.openTrapdoor(ctx.mats().trapdoor(), d.getOpposite()));
+                            g.put(r[0].relative(plus.getOpposite()).relative(d), Geo.openTrapdoor(ctx.mats().trapdoor(), d.getOpposite()));
+                            g.put(r[1].relative(plus).relative(d), Geo.openTrapdoor(ctx.mats().trapdoor(), d.getOpposite()));
                         }
-                    }),
-                    ctx.variant(id(), "frame", e -> {
+                    })),
+                    ctx.variant(id(), "frame", e -> e.atomic(g -> {
                         for (BlockPos[] c : cols.values()) {
-                            e.put(c[1].above().relative(d), Geo.stairs(ctx.mats().woodStairs(), d.getOpposite(), Half.TOP));
-                            e.put(c[0].below().relative(d), Geo.stairs(ctx.mats().woodStairs(), d.getOpposite(), Half.BOTTOM));
+                            g.put(c[1].above().relative(d), Geo.stairs(ctx.mats().woodStairs(), d.getOpposite(), Half.TOP));
+                            g.put(c[0].below().relative(d), Geo.stairs(ctx.mats().woodStairs(), d.getOpposite(), Half.BOTTOM));
                         }
-                    }),
-                    ctx.variant(id(), "flowers", e -> {
+                    })),
+                    ctx.variant(id(), "flowers", e -> e.atomic(g -> {
                         for (BlockPos[] c : cols.values()) {
                             BlockPos box = c[0].below().relative(d);
-                            if (e.put(box, leaves)) e.put(box.relative(d), Geo.openTrapdoor(ctx.mats().trapdoor(), d.getOpposite()));
+                            g.put(box, leaves);
+                            g.put(box.relative(d), Geo.openTrapdoor(ctx.mats().trapdoor(), d.getOpposite()));
                         }
-                    })));
+                    }))));
             if (sg != null && maxY >= minY) out.add(sg);
         }
     }

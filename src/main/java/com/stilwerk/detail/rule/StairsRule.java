@@ -62,8 +62,11 @@ public final class StairsRule implements DetailRule {
                     ctx.variant(id(), "fence", e -> rail(e, run, open, ctx.mats().fence(), true)),
                     ctx.variant(id(), "wall", e -> rail(e, run, open, ctx.mats().stoneWall(), true)),
                     ctx.variant(id(), "trapdoor", e -> {
-                        for (Direction side : open)
-                            for (BlockPos c : run) e.put(c.relative(side), Geo.openTrapdoor(ctx.mats().trapdoor(), side.getOpposite()));
+                        for (Direction side : open) {
+                            e.atomic(g -> {
+                                for (BlockPos c : run) g.put(c.relative(side), Geo.openTrapdoor(ctx.mats().trapdoor(), side.getOpposite()));
+                            });
+                        }
                     })));
             if (sg != null) out.add(sg);
         }
@@ -71,8 +74,12 @@ public final class StairsRule implements DetailRule {
 
     private static void rail(Edit e, List<BlockPos> run, List<Direction> open, BlockState post, boolean lantern) {
         for (Direction side : open) {
-            for (BlockPos c : run) e.put(c.relative(side), post);
-            if (lantern) e.put(run.get(0).relative(side).above(), Geo.hanging(Blocks.LANTERN.defaultBlockState(), false));
+            // a railing with gaps looks broken: the whole side or nothing; the lantern only on a complete railing
+            if (e.atomic(g -> {
+                for (BlockPos c : run) g.put(c.relative(side), post);
+            }) && lantern) {
+                e.put(run.get(0).relative(side).above(), Geo.hanging(Blocks.LANTERN.defaultBlockState(), false));
+            }
         }
     }
 }

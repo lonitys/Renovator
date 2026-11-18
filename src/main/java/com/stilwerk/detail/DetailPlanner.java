@@ -60,7 +60,7 @@ public final class DetailPlanner {
         return out;
     }
 
-    /** The changes of the chosen variants; a position changed by an earlier choice is not changed again. */
+    /** The changes of the chosen variants; a suggestion that collides with an earlier choice is skipped whole. */
     public static ChangeSet combine(List<Suggestion> all, List<Choice> choices) {
         Map<String, Suggestion> byKey = new HashMap<>();
         for (Suggestion s : all) byKey.putIfAbsent(s.key(), s);
@@ -69,8 +69,19 @@ public final class DetailPlanner {
         for (Choice c : choices) {
             Suggestion s = byKey.get(c.key());
             if (s == null || c.variant() < 0 || c.variant() >= s.variants().size()) continue;
-            for (Change ch : s.variants().get(c.variant()).changes().changes()) {
-                if (used.add(ch.pos().asLong())) b.add(ch);
+            List<Change> changes = s.variants().get(c.variant()).changes().changes();
+            // a suggestion is applied whole or not at all: half of it (a post without its lantern) looks misplaced
+            boolean free = true;
+            for (Change ch : changes) {
+                if (used.contains(ch.pos().asLong())) {
+                    free = false;
+                    break;
+                }
+            }
+            if (!free) continue;
+            for (Change ch : changes) {
+                used.add(ch.pos().asLong());
+                b.add(ch);
             }
         }
         return b.build();

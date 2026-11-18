@@ -113,11 +113,12 @@ public final class DetailTests {
         var cs = DetailPlanner.combine(all, List.of(new Choice("window", window.anchor(), 0), new Choice("entrance", entrance.anchor(), 0),
                 new Choice("nope", BlockPos.ZERO, 0)));
         Applier.applyNow(h.getLevel(), cs, CreativeGate.INSTANCE);
-        h.assertBlockPresent(Blocks.OAK_FENCE, new BlockPos(6, Y0 + 1, 8));
-        h.assertBlockPresent(Blocks.LANTERN, new BlockPos(6, Y0 + 2, 8));
         h.assertBlockPresent(Blocks.OAK_TRAPDOOR, new BlockPos(2, Y0 + 2, 8));
-        // the shutter right of the west window and the lantern left of the door want the same cell: the first choice wins
         h.assertBlockPresent(Blocks.OAK_TRAPDOOR, new BlockPos(4, Y0 + 2, 8));
+        // the entrance lanterns want the shutter cell next to the door: the whole entrance suggestion is skipped,
+        // no lone fence posts are left behind
+        h.assertBlockNotPresent(Blocks.OAK_FENCE, new BlockPos(4, Y0 + 1, 8));
+        h.assertBlockNotPresent(Blocks.OAK_FENCE, new BlockPos(6, Y0 + 1, 8));
         h.succeed();
     }
 
@@ -135,6 +136,44 @@ public final class DetailTests {
         h.assertBlockPresent(Blocks.SPRUCE_FENCE, new BlockPos(3, Y0, 4));
         h.assertBlockPresent(Blocks.SPRUCE_FENCE, new BlockPos(5, Y0 + 2, 6));
         h.assertBlockPresent(Blocks.LANTERN, new BlockPos(3, Y0 + 1, 4));
+        h.succeed();
+    }
+
+    @GameTest(template = T)
+    public static void pillarsAvoidDoorsAndKeepPlinth(GameTestHelper h) {
+        // a free-standing wall x 1..9: stone brick plinth, planks above, a door at x = 5
+        for (int x = 1; x <= 9; x++) {
+            h.setBlock(new BlockPos(x, Y0, 3), Blocks.STONE_BRICKS);
+            for (int y = 1; y <= 3; y++) h.setBlock(new BlockPos(x, Y0 + y, 3), Blocks.OAK_PLANKS);
+        }
+        BlockState door = Blocks.OAK_DOOR.defaultBlockState().setValue(DoorBlock.FACING, Direction.SOUTH);
+        h.setBlock(new BlockPos(5, Y0 + 1, 3), door.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER));
+        h.setBlock(new BlockPos(5, Y0 + 2, 3), door.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
+        ResolvedSelection sel = new Selection.Box(h.absolutePos(new BlockPos(0, Y0, 2)), h.absolutePos(new BlockPos(10, Y0 + 4, 4))).resolve(h.getLevel(), 10_000);
+        Suggestion pillars = DetailPlanner.find(h.getLevel(), sel, 1).stream().filter(s -> s.rule().equals("pillars")).findFirst().orElse(null);
+        h.assertTrue(pillars != null, "pillars suggested for the wall");
+        Applier.applyNow(h.getLevel(), pillars.variants().get(0).changes(), CreativeGate.INSTANCE);
+        for (int y = 1; y <= 3; y++) {
+            h.assertBlockPresent(Blocks.OAK_LOG, new BlockPos(1, Y0 + y, 3));
+            h.assertBlockPresent(Blocks.OAK_LOG, new BlockPos(9, Y0 + y, 3));
+        }
+        h.assertBlockPresent(Blocks.OAK_DOOR, new BlockPos(5, Y0 + 1, 3));
+        h.assertBlockPresent(Blocks.OAK_PLANKS, new BlockPos(5, Y0 + 3, 3)); // no single log above the door
+        boolean shifted = h.getBlockState(new BlockPos(4, Y0 + 2, 3)).is(Blocks.OAK_LOG) || h.getBlockState(new BlockPos(6, Y0 + 2, 3)).is(Blocks.OAK_LOG);
+        h.assertTrue(shifted, "the middle pillar moved next to the door");
+        for (int x = 1; x <= 9; x++) h.assertBlockPresent(Blocks.STONE_BRICKS, new BlockPos(x, Y0, 3)); // plinth untouched
+        h.succeed();
+    }
+
+    @GameTest(template = T)
+    public static void entranceLanternsBothOrNone(GameTestHelper h) {
+        house(h, Blocks.OAK_PLANKS, Blocks.OAK_STAIRS, Blocks.OAK_DOOR);
+        h.setBlock(new BlockPos(4, Y0 + 1, 8), Blocks.COBBLESTONE); // the west lantern post cell is taken
+        Suggestion entrance = find(h).stream().filter(s -> s.rule().equals("entrance")).findFirst().orElse(null);
+        h.assertTrue(entrance != null, "entrance suggested");
+        for (var v : entrance.variants()) {
+            h.assertFalse(v.key().endsWith("lanterns"), "no single lantern post: " + v.key());
+        }
         h.succeed();
     }
 

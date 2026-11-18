@@ -16,9 +16,40 @@ import net.minecraft.world.level.block.state.BlockState;
 public final class Edit {
     private final BuildingView view;
     private final Long2ObjectLinkedOpenHashMap<Change> changes = new Long2ObjectLinkedOpenHashMap<>();
+    private int depth;
+    private boolean groupFailed;
+    private final it.unimi.dsi.fastutil.longs.LongArrayList groupKeys = new it.unimi.dsi.fastutil.longs.LongArrayList();
 
     Edit(BuildingView view) {
         this.view = view;
+    }
+
+    /**
+     * Runs {@code body} as one unit: when any of its put/replace calls fails, none of them is kept
+     * (a lantern without its post, a single shutter ... would look misplaced). Returns true when kept.
+     */
+    public boolean atomic(java.util.function.Consumer<Edit> body) {
+        boolean outer = depth == 0;
+        int mark = groupKeys.size();
+        depth++;
+        try {
+            body.accept(this);
+        } finally {
+            depth--;
+        }
+        if (groupFailed && outer) {
+            for (int i = mark; i < groupKeys.size(); i++) changes.remove(groupKeys.getLong(i));
+            groupKeys.size(mark);
+            groupFailed = false;
+            return false;
+        }
+        if (outer) groupKeys.size(mark);
+        return !groupFailed;
+    }
+
+    private boolean fail() {
+        if (depth > 0) groupFailed = true;
+        return false;
     }
 
     private static boolean connects(BlockState s) {
@@ -29,8 +60,9 @@ public final class Edit {
     /** Places into a free cell (air or replaceable, not protected). Returns false when the cell is taken. */
     public boolean put(BlockPos p, BlockState s) {
         long k = p.asLong();
-        if (changes.containsKey(k) || !view.free(p)) return false;
+        if (changes.containsKey(k) || !view.free(p)) return fail();
         changes.put(k, new Change(p, view.state(p), s, null, connects(s)));
+        if (depth > 0) groupKeys.add(k);
         return true;
     }
 
@@ -38,8 +70,9 @@ public final class Edit {
     public boolean replace(BlockPos p, BlockState s) {
         long k = p.asLong();
         BlockState cur = view.state(p);
-        if (changes.containsKey(k) || !view.built(p) || cur == s || Protection.isProtected(view.level(), p, cur)) return false;
+        if (changes.containsKey(k) || !view.built(p) || cur == s || Protection.isProtected(view.level(), p, cur)) return fail();
         changes.put(k, new Change(p, cur, s, null, connects(s) || connects(cur)));
+        if (depth > 0) groupKeys.add(k);
         return true;
     }
 

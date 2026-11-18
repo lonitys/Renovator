@@ -45,18 +45,18 @@ public final class CornerRule implements DetailRule {
             BlockPos arm = p.relative(a).relative(b);
             if (!v.outside(arm) || !v.outside(arm.below())) return;
             Suggestion sg = DetailTypes.suggestion(id(), p, List.of(
-                    ctx.variant(id(), "lantern", e -> {
-                        if (e.put(arm, ctx.mats().fence())) e.put(arm.below(), Geo.hanging(Blocks.LANTERN.defaultBlockState(), true));
-                    }),
-                    ctx.variant(id(), "soul", e -> {
-                        if (e.put(arm, Blocks.CHAIN.defaultBlockState().setValue(ChainBlock.AXIS, Direction.Axis.Y))) {
-                            e.put(arm.below(), Geo.hanging(Blocks.SOUL_LANTERN.defaultBlockState(), true));
-                        }
-                    }),
-                    ctx.variant(id(), "torches", e -> {
-                        e.put(p.relative(a), Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, a));
-                        e.put(p.relative(b), Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, b));
-                    })));
+                    ctx.variant(id(), "lantern", e -> e.atomic(g -> {
+                        g.put(arm, ctx.mats().fence());
+                        g.put(arm.below(), Geo.hanging(Blocks.LANTERN.defaultBlockState(), true));
+                    })),
+                    ctx.variant(id(), "soul", e -> e.atomic(g -> {
+                        g.put(arm, Blocks.CHAIN.defaultBlockState().setValue(ChainBlock.AXIS, Direction.Axis.Y));
+                        g.put(arm.below(), Geo.hanging(Blocks.SOUL_LANTERN.defaultBlockState(), true));
+                    })),
+                    ctx.variant(id(), "torches", e -> e.atomic(g -> {
+                        g.put(p.relative(a), Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, a));
+                        g.put(p.relative(b), Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, b));
+                    }))));
             if (sg != null) out.add(sg);
         });
     }

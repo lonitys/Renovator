@@ -28,7 +28,7 @@ public final class PlinthRule implements DetailRule {
     public void find(BuildingView v, DetailContext ctx, List<Suggestion> out) {
         Map<BlockPos, Direction> cells = new LinkedHashMap<>();
         for (BlockPos p : Geo.built(v)) {
-            if (!Geo.isFull(v, p) || v.built(p.below())) continue;
+            if (!Geo.isWallBody(v, p) || v.built(p.below())) continue;
             for (Direction d : Geo.HORIZONTAL) {
                 if (v.outside(p.relative(d))) {
                     cells.putIfAbsent(p, d);

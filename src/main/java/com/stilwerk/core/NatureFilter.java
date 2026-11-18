@@ -34,6 +34,13 @@ public final class NatureFilter {
         return false;
     }
 
+    /** Nature judged from the state alone (no world): tag and leaf persistence. */
+    public static boolean isNaturalState(BlockState state) {
+        if (state.isAir()) return false;
+        if (state.is(StilwerkTags.NATURAL)) return true;
+        return state.hasProperty(LeavesBlock.PERSISTENT) && !state.getValue(LeavesBlock.PERSISTENT);
+    }
+
     /** A log is part of a tree when its connected log cluster touches natural (non-persistent) leaves or wart blocks. */
     private boolean isTreeLog(BlockPos start) {
         long key = start.asLong();

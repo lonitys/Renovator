@@ -65,6 +65,10 @@ dependencies {
     if (project.hasProperty('withProjectE')) {
         localRuntime files(project.property('withProjectE'))
     }
+    // Furniture mods etc. in dev runs only: -PwithMods=<jar>;<jar>;...
+    if (project.hasProperty('withMods')) {
+        project.property('withMods').toString().split(';').each { if (it.trim()) localRuntime files(it.trim()) }
+    }
 }
 
 // Game tests and the dev scene only run in the dev environment; keep them out of the release jar.

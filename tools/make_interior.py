@@ -72,7 +72,7 @@ mod("desk_stairs", "desk", "window", (2, 2, 2), [
     (0, 0, 0, v("oak_stairs[facing=north,half=top]")), (1, 0, 0, v("oak_stairs[facing=north,half=top]")),
     (1, 1, 0, v("candle[candles=2,lit=false]")), (0, 0, 1, v("oak_stairs[facing=south]"))])
 mod("desk_mcw", "desk", "window", (2, 2, 2), [
-    (0, 0, 0, f"{MCW}:oak_desk[facing=south]"), (1, 0, 0, f"{MCW}:oak_desk[facing=south]"),
+    (0, 0, 0, f"{MCW}:oak_desk[facing=north]"), (1, 0, 0, f"{MCW}:oak_desk[facing=north]"),
     (1, 1, 0, LANTERN), (0, 0, 1, f"{MCW}:oak_chair[facing=north]")], requires=[MCW])
 mod("desk_rf", "desk", "window", (2, 2, 2), [
     (0, 0, 0, f"{RF}:oak_desk[facing=south]"), (1, 0, 0, f"{RF}:oak_desk[facing=south]"),
@@ -155,7 +155,7 @@ mod("lectern", "lectern", "window", (1, 1, 1), [(0, 0, 0, v("lectern[facing=sout
 
 mod("bath_cauldrons", "bath", "wall", (2, 1, 1), row(0, 0, [v("water_cauldron[level=3]")] * 2))
 mod("bath_rf", "bath", "wall", (2, 1, 1), [(0, 0, 0, f"{RF}:COLOR_bath[facing=east,type=bottom]"),
-                                           (1, 0, 0, f"{RF}:COLOR_bath[facing=east,type=top]")], requires=[RF])
+                                           (1, 0, 0, f"{RF}:COLOR_bath[facing=east,type=head]")], requires=[RF])
 mod("toilet_quartz", "toilet", "corner", (1, 1, 1), [(0, 0, 0, v("quartz_stairs[facing=north]"))])
 mod("toilet_rf", "toilet", "corner", (1, 1, 1), [(0, 0, 0, f"{RF}:white_toilet[facing=south]")], requires=[RF])
 mod("basin_cauldron", "basin", "window", (1, 1, 1), [(0, 0, 0, v("water_cauldron[level=1]"))])

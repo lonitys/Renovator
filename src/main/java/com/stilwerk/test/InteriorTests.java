@@ -138,7 +138,9 @@ public final class InteriorTests {
         h.assertTrue(WoodAdapter.adapt(Blocks.STONE.defaultBlockState(), wood("spruce")).is(Blocks.STONE), "stone unchanged");
         h.assertTrue(WoodAdapter.adapt(Blocks.OAK_PLANKS.defaultBlockState(), wood("dark_oak")).is(Blocks.DARK_OAK_PLANKS), "oak → dark oak");
         for (String c : ModuleLibrary.categories()) h.assertTrue(!ModuleLibrary.available(c).isEmpty(), "category " + c + " has modules");
-        h.assertTrue(ModuleLibrary.available("bed").stream().noneMatch(m -> m.modded()), "no modded beds without the mods");
+        if (!net.neoforged.fml.ModList.get().isLoaded("mcwfurnitures") && !net.neoforged.fml.ModList.get().isLoaded("refurbished_furniture")) {
+            h.assertTrue(ModuleLibrary.available("bed").stream().noneMatch(m -> m.modded()), "no modded beds without the mods");
+        }
         h.succeed();
     }
 

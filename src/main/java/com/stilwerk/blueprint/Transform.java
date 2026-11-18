@@ -29,8 +29,17 @@ public final class Transform {
                 case CLOCKWISE_180 -> { nx = sx - 1 - x; nz = sz - 1 - z; }
                 default -> { nx = x; nz = z; }
             }
-            b.set(nx, p.getY(), nz, state.mirror(mirror).rotate(rot), be);
+            b.set(nx, p.getY(), nz, turn(state, rot, mirror), be);
         });
         return b.build();
+    }
+
+    /** Mirrors and rotates a state; blocks whose facing cannot take every direction (some modded furniture) stay as they are. */
+    static net.minecraft.world.level.block.state.BlockState turn(net.minecraft.world.level.block.state.BlockState s, Rotation rot, Mirror mirror) {
+        try {
+            return s.mirror(mirror).rotate(rot);
+        } catch (RuntimeException e) {
+            return s;
+        }
     }
 }

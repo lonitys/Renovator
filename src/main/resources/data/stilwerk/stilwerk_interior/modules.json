@@ -473,7 +473,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_desk[facing=south]"
+    "s": "mcwfurnitures:oak_desk[facing=north]"
    },
    {
     "p": [
@@ -481,7 +481,7 @@
      0,
      0
     ],
-    "s": "mcwfurnitures:oak_desk[facing=south]"
+    "s": "mcwfurnitures:oak_desk[facing=north]"
    },
    {
     "p": [
@@ -2161,7 +2161,7 @@
      0,
      0
     ],
-    "s": "refurbished_furniture:COLOR_bath[facing=east,type=top]"
+    "s": "refurbished_furniture:COLOR_bath[facing=east,type=head]"
    }
   ]
  },

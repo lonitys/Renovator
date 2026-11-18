@@ -2,6 +2,7 @@ package com.stilwerk.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -11,10 +12,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import java.util.List;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -50,11 +49,16 @@ public final class GhostMesh implements AutoCloseable {
     public static GhostMesh build(ClientLevel level, BlockPos anchor, List<Block> blocks, float alpha, int max) {
         Minecraft mc = Minecraft.getInstance();
         BlockRenderDispatcher dispatcher = mc.getBlockRenderer();
-        BlockColors colors = mc.getBlockColors();
         BufferBuilder builder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
         VertexConsumer consumer = new AlphaConsumer(builder, alpha);
         PoseStack ps = new PoseStack();
         RandomSource random = RandomSource.create(42);
+        Long2ObjectOpenHashMap<BlockState> ghosts = new Long2ObjectOpenHashMap<>(Math.min(blocks.size(), max));
+        for (int i = 0; i < blocks.size() && i < max; i++) {
+            Block b = blocks.get(i);
+            ghosts.put(anchor.offset(b.rel()).asLong(), b.state());
+        }
+        GhostView view = new GhostView(level, ghosts);
         int n = 0;
         for (Block b : blocks) {
             if (n >= max) break;
@@ -62,21 +66,15 @@ public final class GhostMesh implements AutoCloseable {
             if (state.isAir() || state.getRenderShape() != RenderShape.MODEL) continue;
             BakedModel model = dispatcher.getBlockModel(state);
             BlockPos world = anchor.offset(b.rel());
-            int tint = colors.getColor(state, level, world, 0);
-            float r = 1, g = 1, bl = 1;
-            if (tint != -1) {
-                r = (tint >> 16 & 255) / 255f;
-                g = (tint >> 8 & 255) / 255f;
-                bl = (tint & 255) / 255f;
-            }
+            long seed = state.getSeed(world);
             ps.pushPose();
-            ps.translate(b.rel().getX() + 0.5, b.rel().getY() + 0.5, b.rel().getZ() + 0.5);
-            ps.scale(1.004f, 1.004f, 1.004f); // slightly larger than the real block: no z-fighting
-            ps.translate(-0.5, -0.5, -0.5);
-            random.setSeed(42);
+            ps.translate(b.rel().getX(), b.rel().getY(), b.rel().getZ());
+            random.setSeed(seed);
+            // tesselated like a chunk against "the world after the change": real light, shading and tints,
+            // faces between ghost blocks culled
             for (RenderType rt : model.getRenderTypes(state, random, ModelData.EMPTY)) {
-                dispatcher.getModelRenderer().renderModel(ps.last(), consumer, state, model, r, g, bl,
-                        LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, rt);
+                dispatcher.getModelRenderer().tesselateBlock(view, model, state, world, ps, consumer, true, random, seed,
+                        OverlayTexture.NO_OVERLAY, ModelData.EMPTY, rt);
             }
             ps.popPose();
             n++;
@@ -97,11 +95,14 @@ public final class GhostMesh implements AutoCloseable {
                 (float) (anchor.getX() - camera.x), (float) (anchor.getY() - camera.y), (float) (anchor.getZ() - camera.z));
         RenderType rt = RenderType.translucent();
         rt.setupRenderState();
-        RenderSystem.depthMask(false);
+        // pull the ghost towards the camera: it wins against the real block in the same place, even on inner faces
+        RenderSystem.enablePolygonOffset();
+        RenderSystem.polygonOffset(-1.0f, -10.0f);
         buffer.bind();
         buffer.drawWithShader(mv, projection, GameRenderer.getRendertypeTranslucentShader());
         VertexBuffer.unbind();
-        RenderSystem.depthMask(true);
+        RenderSystem.polygonOffset(0.0f, 0.0f);
+        RenderSystem.disablePolygonOffset();
         rt.clearRenderState();
     }
 

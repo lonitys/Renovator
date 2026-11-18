@@ -14,6 +14,8 @@ import org.jetbrains.annotations.Nullable;
 public final class ModeWheelScreen extends StilwerkScreen {
     private static final int RADIUS = 62, TILE = 54;
     private static final double[] ANGLES = {-90, 30, 150};
+    /** Dev scene: keep the wheel open without the key held. */
+    public static boolean holdOpenForTests;
 
     public ModeWheelScreen() {
         super(Component.translatable("stilwerk.wheel.title"), null);
@@ -71,6 +73,7 @@ public final class ModeWheelScreen extends StilwerkScreen {
 
     @Override
     public void tick() {
+        if (holdOpenForTests) return;
         long window = minecraft.getWindow().getWindow();
         InputConstants.Key key = Keys.MODE_WHEEL.getKey();
         if (key.getType() == InputConstants.Type.KEYSYM && !InputConstants.isKeyDown(window, key.getValue())) {

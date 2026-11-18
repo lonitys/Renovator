@@ -121,6 +121,16 @@ public final class FamilyPickerScreen extends StilwerkScreen {
         protected int getScrollbarPosition() {
             return getX() + width - 6;
         }
+
+        @Override
+        protected void renderListBackground(GuiGraphics g) {
+        }
+
+        @Override
+        protected void renderListSeparators(GuiGraphics g) {
+            g.fill(getX(), getY() - 1, getRight(), getY(), 0x605A6B7A);
+            g.fill(getX(), getBottom(), getRight(), getBottom() + 1, 0x605A6B7A);
+        }
     }
 
     private final class Choice extends ObjectSelectionList.Entry<Choice> {

@@ -248,14 +248,16 @@ public final class SwapScreen extends StilwerkScreen {
             ItemStack icon = Families.icon(c.family());
             g.renderItem(icon, left + 17, top + 2);
             Component name = Families.name(c.family());
-            String text = font.plainSubstrByWidth(name.getString(), width - 17 - 20 - 168 - 40);
-            g.drawString(font, text, left + 37, top + 6, 0xFFFFFFFF);
             String count = "×" + c.count();
-            g.drawString(font, count, left + width - 168 - 8 - font.width(count), top + 6, 0xFFB0B0B0);
+            int countX = left + width - 162 - 24 - 6 - font.width(count);
+            String text = font.plainSubstrByWidth(name.getString(), countX - (left + 37) - 4);
+            g.drawString(font, text, left + 37, top + 6, 0xFFFFFFFF);
+            g.drawString(font, count, countX, top + 6, 0xFFB0B0B0);
+            g.drawString(font, "→", left + width - 162 - 22, top + 6, 0xFF808890);
             target.setPosition(left + width - 162, top + 1);
             target.render(g, mx, my, pt);
             ItemStack ti = Families.targetIcon(mapping.familyTarget(c.family().id()), mixes);
-            if (!ti.isEmpty()) g.renderItem(ti, left + width - 182, top + 2);
+            if (!ti.isEmpty()) g.renderItem(ti, left + width - 162 + 2, top + 1);
         }
 
         @Override
@@ -297,7 +299,7 @@ public final class SwapScreen extends StilwerkScreen {
         public void render(GuiGraphics g, int index, int top, int left, int width, int height, int mx, int my, boolean hovered, float pt) {
             g.drawString(font, Component.translatable(shape.translationKey()), left + 37, top + 6, 0xFFC8D0D8);
             String n = "×" + count;
-            g.drawString(font, n, left + width - 168 - 8 - font.width(n), top + 6, 0xFF909090);
+            g.drawString(font, n, left + width - 162 - 24 - 6 - font.width(n), top + 6, 0xFF909090);
             target.setPosition(left + width - 162, top + 1);
             target.render(g, mx, my, pt);
             reset.setPosition(left + 18, top + 1);

@@ -36,7 +36,7 @@ T = {
     "stilwerk.swap.title": ("Stil-Tausch", "Style swap"),
     "stilwerk.swap.title_blueprint": ("Bauplan im Stil anpassen", "Restyle blueprint"),
     "stilwerk.swap.template": ("Vorlage", "Template"),
-    "stilwerk.swap.no_template": ("Vorlage: —", "Template: —"),
+    "stilwerk.swap.no_template": ("—", "—"),
     "stilwerk.swap.include_nature": ("Natur einschließen", "Include nature"),
     "stilwerk.swap.preview": ("Vorschau", "Preview"),
     "stilwerk.swap.apply": ("Anwenden", "Apply"),
@@ -140,6 +140,7 @@ T = {
     "stilwerk.blueprint.saved": ("„%s“ gespeichert (%s Blöcke) – Enter setzt ein", "\"%s\" saved (%s blocks) – Enter places it"),
     "stilwerk.place.hint": ("„%s“ einsetzen: Enter · ←/→ drehen · ↑ spiegeln · Strg+Mausrad Höhe · Esc beenden", "Place \"%s\": Enter · ←/→ rotate · ↑ mirror · Ctrl+wheel height · Esc stop"),
     "stilwerk.place.cancelled": ("Einsetzen beendet", "Placing stopped"),
+    "stilwerk.place.placed": ("„%s“ eingesetzt – nochmal: Bauplan-Menü → Bibliothek", "\"%s\" placed – again: blueprint menu → library"),
 
     "stilwerk.library.title": ("Bauplan-Bibliothek", "Blueprint library"),
     "stilwerk.library.place": ("Einsetzen", "Place"),
@@ -155,7 +156,10 @@ T = {
     "stilwerk.library.imported": ("%s Datei(en) importiert", "%s file(s) imported"),
 
     "stilwerk.report.title": ("Material fehlt", "Materials missing"),
-    "stilwerk.report.columns": ("Block                         braucht  hast  fehlt", "Block                         need  have  missing"),
+    "stilwerk.report.col_block": ("Block", "Block"),
+    "stilwerk.report.col_need": ("braucht", "need"),
+    "stilwerk.report.col_have": ("hast", "have"),
+    "stilwerk.report.col_missing": ("fehlt", "missing"),
     "stilwerk.report.partial": ("So weit es reicht", "As far as it goes"),
 
     "stilwerk.progress": ("Stilwerk %s %s%%", "Stilwerk %s %s%%"),

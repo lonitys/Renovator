@@ -24,6 +24,17 @@ public class RowList<E extends ContainerObjectSelectionList.Entry<E>> extends Co
         return getX() + width - 6;
     }
 
+    @Override
+    protected void renderListBackground(net.minecraft.client.gui.GuiGraphics g) {
+        // the screen panel is the background
+    }
+
+    @Override
+    protected void renderListSeparators(net.minecraft.client.gui.GuiGraphics g) {
+        g.fill(getX(), getY() - 1, getRight(), getY(), 0x605A6B7A);
+        g.fill(getX(), getBottom(), getRight(), getBottom() + 1, 0x605A6B7A);
+    }
+
     public void set(Collection<E> rows) {
         double scroll = getScrollAmount();
         replaceEntries(rows);

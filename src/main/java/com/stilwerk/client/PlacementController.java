@@ -135,15 +135,15 @@ public final class PlacementController {
         if (original == null || mc.level == null || mc.player == null) return;
         if (transformed == null) transformed = Transform.apply(original, rotation, mirror);
         Vec3i size = transformed.size();
-        HitResult hit = mc.hitResult;
-        BlockPos base;
+        // look further than the reach so the ghost lands on the ground the player looks at
+        HitResult hit = mc.player.pick(64.0, 1.0f, false);
         if (hit instanceof BlockHitResult bh && hit.getType() == HitResult.Type.BLOCK) {
-            base = bh.getBlockPos().relative(bh.getDirection());
-        } else {
-            Vec3 eye = mc.player.getEyePosition();
-            base = BlockPos.containing(eye.add(mc.player.getLookAngle().scale(8)));
+            BlockPos base = bh.getBlockPos().relative(bh.getDirection());
+            origin = base.offset(-size.getX() / 2, height, -size.getZ() / 2);
+        } else if (meshOrigin == null) {
+            BlockPos base = BlockPos.containing(mc.player.getEyePosition().add(mc.player.getLookAngle().scale(12)));
+            origin = base.offset(-size.getX() / 2, height, -size.getZ() / 2);
         }
-        origin = base.offset(-size.getX() / 2, height, -size.getZ() / 2);
         ticksSinceStyle++;
         boolean moved = meshOrigin == null || !meshOrigin.equals(origin);
         // a mix looks different at every position: restyle while moving, at most every 4 ticks
@@ -173,7 +173,7 @@ public final class PlacementController {
         if (mesh != null && showGhost) mesh.draw(modelView, projection, camera, origin);
     }
 
-    /** Uploads the blueprint (in ≤ 30 000-byte chunks) and asks the server to place it here. Stays in placement mode. */
+    /** Uploads the blueprint (in ≤ 30 000-byte chunks), asks the server to place it here, and ends placing. */
     public static void confirm() {
         if (original == null) return;
         byte[] data = BlueprintIO.toNetwork(original);
@@ -191,5 +191,8 @@ public final class PlacementController {
         }
         PacketDistributor.sendToServer(new PlaceRequest(ClientState.nextRequestId(), hash, origin, rotation, mirror, mapping,
                 PreviewController.usedMixes(mapping, mixes), seed, overwrite, false));
+        String name = original.meta().name();
+        stop();
+        ClientState.actionbar(Component.translatable("stilwerk.place.placed", name));
     }
 }

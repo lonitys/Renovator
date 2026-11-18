@@ -53,7 +53,12 @@ public final class MaterialReportScreen extends StilwerkScreen {
     public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
         super.render(g, mouseX, mouseY, partialTick);
         drawTitle(g);
-        g.drawString(font, Component.translatable("stilwerk.report.columns"), panelX + 30, panelY + 22, 0xFF9AA8B4);
+        // same geometry as the rows: list at panelX + 4, row width = list width - 14, centred
+        int listW = panelW - 8, rowW = listW - 14, left = panelX + 4 + (listW - rowW) / 2, col = left + rowW - 150;
+        g.drawString(font, Component.translatable("stilwerk.report.col_block"), left + 24, panelY + 22, 0xFF9AA8B4);
+        g.drawString(font, Component.translatable("stilwerk.report.col_need"), col, panelY + 22, 0xFF9AA8B4);
+        g.drawString(font, Component.translatable("stilwerk.report.col_have"), col + 52, panelY + 22, 0xFF9AA8B4);
+        g.drawString(font, Component.translatable("stilwerk.report.col_missing"), col + 112, panelY + 22, 0xFF9AA8B4);
     }
 
     private final class Lines extends ObjectSelectionList<Row> {
@@ -75,6 +80,16 @@ public final class MaterialReportScreen extends StilwerkScreen {
         protected int getScrollbarPosition() {
             return getX() + width - 6;
         }
+
+        @Override
+        protected void renderListBackground(GuiGraphics g) {
+        }
+
+        @Override
+        protected void renderListSeparators(GuiGraphics g) {
+            g.fill(getX(), getY() - 1, getRight(), getY(), 0x605A6B7A);
+            g.fill(getX(), getBottom(), getRight(), getBottom() + 1, 0x605A6B7A);
+        }
     }
 
     private final class Row extends ObjectSelectionList.Entry<Row> {
@@ -88,12 +103,12 @@ public final class MaterialReportScreen extends StilwerkScreen {
         public void render(GuiGraphics g, int index, int top, int left, int width, int height, int mx, int my, boolean hovered, float pt) {
             ItemStack stack = new ItemStack(line.item());
             g.renderItem(stack, left + 2, top + 1);
-            String name = font.plainSubstrByWidth(stack.getHoverName().getString(), width - 26 - 130);
+            String name = font.plainSubstrByWidth(stack.getHoverName().getString(), width - 26 - 154);
             g.drawString(font, name, left + 24, top + 6, 0xFFFFFFFF);
-            int col = left + width - 128;
+            int col = left + width - 150;
             g.drawString(font, String.valueOf(line.need()), col, top + 6, 0xFFE0E0E0);
-            g.drawString(font, String.valueOf(line.have()) + (line.emc() ? " +EMC" : ""), col + 36, top + 6, line.emc() ? 0xFFC8A0FF : 0xFFE0E0E0);
-            g.drawString(font, String.valueOf(line.missing()), col + 96, top + 6, line.missing() > 0 ? 0xFFFF6060 : 0xFF70E070);
+            g.drawString(font, String.valueOf(line.have()) + (line.emc() ? " +EMC" : ""), col + 52, top + 6, line.emc() ? 0xFFC8A0FF : 0xFFE0E0E0);
+            g.drawString(font, String.valueOf(line.missing()), col + 112, top + 6, line.missing() > 0 ? 0xFFFF6060 : 0xFF70E070);
         }
 
         @Override

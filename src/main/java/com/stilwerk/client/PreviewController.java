@@ -75,7 +75,8 @@ public final class PreviewController {
         anchor = list.isEmpty() ? BlockPos.ZERO : list.get(0).pos();
         List<GhostMesh.Block> blocks = new ArrayList<>(list.size());
         for (Change c : list) blocks.add(new GhostMesh.Block(c.pos().subtract(anchor), c.newState()));
-        mesh = GhostMesh.build(mc.level, anchor, blocks, ClientConfig.ghostAlpha(), ClientConfig.maxGhostBlocks());
+        // nearly opaque: the preview should look like the result, not like a blend with the old blocks
+        mesh = GhostMesh.build(mc.level, anchor, blocks, Math.max(0.9f, ClientConfig.ghostAlpha()), ClientConfig.maxGhostBlocks());
         showAfter = true;
         ClientState.actionbar(Component.translatable("stilwerk.preview.hint", changes));
     }

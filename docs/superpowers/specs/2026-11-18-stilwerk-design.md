@@ -218,7 +218,7 @@ Pakete unter `com.stilwerk` (jede Einheit eine klare Aufgabe):
 | `mix` | `MixPalette`, `MixPattern`, `Noise`, `Mixes` (eingebaut/Config) |
 | `blueprint` | `Blueprint` (Größe, Palette, Blöcke, BE-Daten, Meta), `Transform` (Drehen/Spiegeln), `BlueprintIO` (eigenes `.nbt`), `importer/` (`VanillaNbtImporter`, `SpongeSchemImporter`, `LitematicImporter`, `BlockStateUpgrader`), `BlueprintPlanner` |
 | `compat` | `ProjectECompat` (Reflection: EMC lesen/setzen, Wissen prüfen, Wert eines Items) |
-| `net` | Payloads: `SelectionSync`, `SwapRequest`, `PlaceRequest`, `BlueprintChunk`, `ApplyProgress`, `MaterialReport`, `UndoRequest` |
+| `net` | Payloads: `SwapRequest`, `PlaceRequest`, `BlueprintChunk`, `MaterialReport`, `ConfirmRequest`, `UndoRequest`; `ServerOps` (Prüfen → Planen → Bezahlen → Anwenden → Undo) |
 | `item` | `ArchitectWandItem`, `WandMode` |
 | `client` | Tasten, `ModeWheelScreen`, `SelectionRenderer`, `GhostRenderer`, `SwapScreen`, `MixEditorScreen`, `LibraryScreen`, `PlacementController`, `ClientLibrary`, HUD |
 | `config` | `ServerConfig`, `ClientConfig` |

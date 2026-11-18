@@ -3,7 +3,10 @@ package com.stilwerk;
 import com.stilwerk.config.ClientConfig;
 import com.stilwerk.config.ServerConfig;
 import com.stilwerk.item.ArchitectWandItem;
+import com.stilwerk.family.FamilyOverrides;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
@@ -28,6 +31,7 @@ public final class Stilwerk {
         modBus.addListener(Stilwerk::creativeTab);
         container.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
         container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+        NeoForge.EVENT_BUS.addListener((AddReloadListenerEvent e) -> e.addListener(new FamilyOverrides()));
     }
 
     public static ResourceLocation id(String path) {

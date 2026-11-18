@@ -67,7 +67,9 @@ public final class ClientEvents {
             while (Keys.MODE_WHEEL.consumeClick()) if (wand) mc.setScreen(new ModeWheelScreen());
             while (Keys.CONFIRM.consumeClick()) {
                 if (!wand) continue;
-                if (PreviewController.active()) PreviewController.confirm();
+                if (DetailController.active()) DetailController.confirm();
+                else if (InteriorController.active()) InteriorController.confirm();
+                else if (PreviewController.active()) PreviewController.confirm();
                 else if (PlacementController.active()) PlacementController.confirm();
             }
             while (Keys.TOGGLE_PREVIEW.consumeClick()) {
@@ -75,9 +77,25 @@ public final class ClientEvents {
                 if (PreviewController.active()) PreviewController.toggleBeforeAfter();
                 else PlacementController.toggleGhost();
             }
-            while (Keys.ROTATE_LEFT.consumeClick()) if (wand) PlacementController.rotate(-1);
-            while (Keys.ROTATE_RIGHT.consumeClick()) if (wand) PlacementController.rotate(1);
-            while (Keys.MIRROR.consumeClick()) if (wand) PlacementController.mirror();
+            // arrows: details → previous/next and variant; interior → room type and reroll; placement → rotate/mirror
+            while (Keys.ROTATE_LEFT.consumeClick()) {
+                if (!wand) continue;
+                if (DetailController.active()) DetailController.next(-1);
+                else if (InteriorController.active()) InteriorController.nextType(-1);
+                else PlacementController.rotate(-1);
+            }
+            while (Keys.ROTATE_RIGHT.consumeClick()) {
+                if (!wand) continue;
+                if (DetailController.active()) DetailController.next(1);
+                else if (InteriorController.active()) InteriorController.nextType(1);
+                else PlacementController.rotate(1);
+            }
+            while (Keys.MIRROR.consumeClick()) {
+                if (!wand) continue;
+                if (DetailController.active()) DetailController.cycleVariant();
+                else if (InteriorController.active()) InteriorController.reroll();
+                else PlacementController.mirror();
+            }
             while (Keys.UNDO.consumeClick()) if (wand) PacketDistributor.sendToServer(new SmallPayloads.UndoRequest());
             PlacementController.tick();
         }
@@ -88,7 +106,9 @@ public final class ClientEvents {
             Vec3 cam = e.getCamera().getPosition();
             PreviewController.render(e.getModelViewMatrix(), e.getProjectionMatrix(), cam);
             PlacementController.render(e.getModelViewMatrix(), e.getProjectionMatrix(), cam);
-            if (!WandClient.holdingWand() && !PreviewController.active() && !PlacementController.active()) return;
+            DetailController.render(e.getModelViewMatrix(), e.getProjectionMatrix(), cam);
+            InteriorController.render(e.getModelViewMatrix(), e.getProjectionMatrix(), cam);
+            if (!WandClient.holdingWand() && !PreviewController.active() && !PlacementController.active() && !DetailController.active()) return;
             MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
             VertexConsumer lines = buffers.getBuffer(RenderType.lines());
             PoseStack ps = e.getPoseStack();
@@ -103,6 +123,10 @@ public final class ClientEvents {
             }
             BoundingBox place = PlacementController.active() ? PlacementController.bounds() : null;
             if (place != null) LevelRenderer.renderLineBox(ps, lines, AABB.of(place).inflate(0.02), 0.3f, 1f, 0.4f, 1f);
+            BoundingBox detail = DetailController.currentArea();
+            if (detail != null) LevelRenderer.renderLineBox(ps, lines, AABB.of(detail).inflate(0.03), 1f, 0.85f, 0.2f, 1f);
+            BoundingBox room = InteriorController.roomBounds();
+            if (room != null) LevelRenderer.renderLineBox(ps, lines, AABB.of(room).inflate(0.03), 0.95f, 0.5f, 0.9f, 1f);
             ps.popPose();
             buffers.endBatch(RenderType.lines());
         }
@@ -139,11 +163,17 @@ public final class ClientEvents {
         @SubscribeEvent
         public static void screenOpening(ScreenEvent.Opening e) {
             if (!(e.getNewScreen() instanceof PauseScreen)) return;
-            if (!PreviewController.active() && !PlacementController.active()) return;
+            if (!PreviewController.active() && !PlacementController.active() && !DetailController.active() && !InteriorController.active()) return;
             long window = Minecraft.getInstance().getWindow().getWindow();
             if (!InputConstants.isKeyDown(window, GLFW.GLFW_KEY_ESCAPE)) return; // focus loss still pauses
             e.setCanceled(true);
-            if (PreviewController.active()) {
+            if (DetailController.active()) {
+                DetailController.stop();
+                ClientState.actionbar(net.minecraft.network.chat.Component.translatable("stilwerk.detail.stopped"));
+            } else if (InteriorController.active()) {
+                InteriorController.stop();
+                ClientState.actionbar(net.minecraft.network.chat.Component.translatable("stilwerk.interior.cancelled"));
+            } else if (PreviewController.active()) {
                 PreviewController.cancel();
                 ClientState.actionbar(net.minecraft.network.chat.Component.translatable("stilwerk.preview.cancelled"));
             } else {
@@ -156,6 +186,8 @@ public final class ClientEvents {
         public static void loggedOut(ClientPlayerNetworkEvent.LoggingOut e) {
             PreviewController.cancel();
             PlacementController.stop();
+            DetailController.stop();
+            InteriorController.stop();
             ClientState.resetAll();
             Templates.setDatapack(java.util.List.of());
         }

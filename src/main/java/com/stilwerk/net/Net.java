@@ -36,6 +36,8 @@ public final class Net {
                     (p, ctx) -> ctx.enqueueWork(() -> ServerOps.place((ServerPlayer) ctx.player(), p)));
             r.playToServer(DetailRequest.TYPE, DetailRequest.STREAM_CODEC,
                     (p, ctx) -> ctx.enqueueWork(() -> ServerOps.detail((ServerPlayer) ctx.player(), p)));
+            r.playToServer(InteriorRequest.TYPE, InteriorRequest.STREAM_CODEC,
+                    (p, ctx) -> ctx.enqueueWork(() -> ServerOps.interior((ServerPlayer) ctx.player(), p)));
             r.playToServer(BlueprintChunk.TYPE, BlueprintChunk.STREAM_CODEC,
                     (p, ctx) -> ctx.enqueueWork(() -> UploadBuffer.accept((ServerPlayer) ctx.player(), p)));
             r.playToServer(ConfirmRequest.TYPE, ConfirmRequest.STREAM_CODEC,

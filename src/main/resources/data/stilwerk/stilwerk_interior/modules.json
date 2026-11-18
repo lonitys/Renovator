@@ -1,0 +1,2562 @@
+[
+ {
+  "id": "bed_single",
+  "category": "bed",
+  "placement": "wall",
+  "size": [
+   3,
+   2,
+   2
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:COLOR_bed[facing=north,part=head]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     1
+    ],
+    "s": "minecraft:COLOR_bed[facing=north,part=foot]"
+   },
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=up]"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "minecraft:lantern[hanging=false]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=up]"
+   },
+   {
+    "p": [
+     2,
+     1,
+     0
+    ],
+    "s": "minecraft:potted_azure_bluet"
+   }
+  ]
+ },
+ {
+  "id": "bed_double",
+  "category": "bed",
+  "placement": "wall",
+  "size": [
+   4,
+   2,
+   2
+  ],
+  "requires": [],
+  "weight": 12,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=up]"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "minecraft:lantern[hanging=false]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:COLOR_bed[facing=north,part=head]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     1
+    ],
+    "s": "minecraft:COLOR_bed[facing=north,part=foot]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "minecraft:COLOR_bed[facing=north,part=head]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     1
+    ],
+    "s": "minecraft:COLOR_bed[facing=north,part=foot]"
+   },
+   {
+    "p": [
+     3,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=up]"
+   },
+   {
+    "p": [
+     3,
+     1,
+     0
+    ],
+    "s": "minecraft:potted_red_tulip"
+   }
+  ]
+ },
+ {
+  "id": "bed_plain",
+  "category": "bed",
+  "placement": "wall",
+  "size": [
+   1,
+   1,
+   2
+  ],
+  "requires": [],
+  "weight": 2,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:COLOR_bed[facing=north,part=head]"
+   },
+   {
+    "p": [
+     0,
+     0,
+     1
+    ],
+    "s": "minecraft:COLOR_bed[facing=north,part=foot]"
+   }
+  ]
+ },
+ {
+  "id": "bed_single_mcw",
+  "category": "bed",
+  "placement": "wall",
+  "size": [
+   3,
+   2,
+   2
+  ],
+  "requires": [
+   "mcwfurnitures"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:COLOR_bed[facing=north,part=head]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     1
+    ],
+    "s": "minecraft:COLOR_bed[facing=north,part=foot]"
+   },
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_drawer[facing=south]"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "minecraft:lantern[hanging=false]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_drawer[facing=south]"
+   },
+   {
+    "p": [
+     2,
+     1,
+     0
+    ],
+    "s": "minecraft:potted_azure_bluet"
+   }
+  ]
+ },
+ {
+  "id": "bed_single_rf",
+  "category": "bed",
+  "placement": "wall",
+  "size": [
+   3,
+   2,
+   2
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:COLOR_bed[facing=north,part=head]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     1
+    ],
+    "s": "minecraft:COLOR_bed[facing=north,part=foot]"
+   },
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_drawer[facing=south]"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "refurbished_furniture:COLOR_lamp"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_drawer[facing=south]"
+   },
+   {
+    "p": [
+     2,
+     1,
+     0
+    ],
+    "s": "minecraft:potted_fern"
+   }
+  ]
+ },
+ {
+  "id": "wardrobe_barrels",
+  "category": "wardrobe",
+  "placement": "wall",
+  "size": [
+   2,
+   2,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=south]"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "minecraft:barrel[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     1,
+     0
+    ],
+    "s": "minecraft:barrel[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "wardrobe_mcw",
+  "category": "wardrobe",
+  "placement": "wall",
+  "size": [
+   1,
+   2,
+   1
+  ],
+  "requires": [
+   "mcwfurnitures"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_wardrobe[facing=south,connection=base,hinge=left]"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "mcwfurnitures:oak_wardrobe[facing=south,connection=top,hinge=left]"
+   }
+  ]
+ },
+ {
+  "id": "wardrobe_rf",
+  "category": "wardrobe",
+  "placement": "wall",
+  "size": [
+   1,
+   2,
+   1
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_storage_cabinet[facing=south]"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "refurbished_furniture:oak_storage_cabinet[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "desk_stairs",
+  "category": "desk",
+  "placement": "window",
+  "size": [
+   2,
+   2,
+   2
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:oak_stairs[facing=north,half=top]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:oak_stairs[facing=north,half=top]"
+   },
+   {
+    "p": [
+     1,
+     1,
+     0
+    ],
+    "s": "minecraft:candle[candles=2,lit=false]"
+   },
+   {
+    "p": [
+     0,
+     0,
+     1
+    ],
+    "s": "minecraft:oak_stairs[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "desk_mcw",
+  "category": "desk",
+  "placement": "window",
+  "size": [
+   2,
+   2,
+   2
+  ],
+  "requires": [
+   "mcwfurnitures"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_desk[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_desk[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     1,
+     0
+    ],
+    "s": "minecraft:lantern[hanging=false]"
+   },
+   {
+    "p": [
+     0,
+     0,
+     1
+    ],
+    "s": "mcwfurnitures:oak_chair[facing=north]"
+   }
+  ]
+ },
+ {
+  "id": "desk_rf",
+  "category": "desk",
+  "placement": "window",
+  "size": [
+   2,
+   2,
+   2
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_desk[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_desk[facing=south]"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "refurbished_furniture:computer[facing=south]"
+   },
+   {
+    "p": [
+     0,
+     0,
+     1
+    ],
+    "s": "refurbished_furniture:oak_chair[facing=north]"
+   }
+  ]
+ },
+ {
+  "id": "sofa_stairs",
+  "category": "sofa",
+  "placement": "wall",
+  "size": [
+   5,
+   1,
+   3
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:oak_trapdoor[facing=west,open=true,half=bottom]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:oak_stairs[facing=north]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "minecraft:oak_stairs[facing=north]"
+   },
+   {
+    "p": [
+     3,
+     0,
+     0
+    ],
+    "s": "minecraft:oak_stairs[facing=north]"
+   },
+   {
+    "p": [
+     4,
+     0,
+     0
+    ],
+    "s": "minecraft:oak_trapdoor[facing=east,open=true,half=bottom]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     2
+    ],
+    "s": "minecraft:oak_trapdoor[facing=north,half=top]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     2
+    ],
+    "s": "minecraft:oak_trapdoor[facing=north,half=top]"
+   },
+   {
+    "p": [
+     3,
+     0,
+     2
+    ],
+    "s": "minecraft:oak_trapdoor[facing=north,half=top]"
+   }
+  ]
+ },
+ {
+  "id": "sofa_mcw",
+  "category": "sofa",
+  "placement": "wall",
+  "size": [
+   3,
+   1,
+   3
+  ],
+  "requires": [
+   "mcwfurnitures"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:COLOR_couch[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:COLOR_couch[facing=south]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:COLOR_couch[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     2
+    ],
+    "s": "mcwfurnitures:oak_coffee_table"
+   }
+  ]
+ },
+ {
+  "id": "sofa_rf",
+  "category": "sofa",
+  "placement": "wall",
+  "size": [
+   3,
+   1,
+   3
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:COLOR_sofa[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:COLOR_sofa[facing=south]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:COLOR_sofa[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     2
+    ],
+    "s": "refurbished_furniture:oak_table"
+   }
+  ]
+ },
+ {
+  "id": "media_shelf",
+  "category": "media",
+  "placement": "wall",
+  "size": [
+   3,
+   2,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=up]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:chiseled_bookshelf[facing=south]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=up]"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "minecraft:potted_bamboo"
+   },
+   {
+    "p": [
+     2,
+     1,
+     0
+    ],
+    "s": "minecraft:lantern[hanging=false]"
+   }
+  ]
+ },
+ {
+  "id": "media_rf",
+  "category": "media",
+  "placement": "wall",
+  "size": [
+   2,
+   2,
+   1
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_drawer[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_drawer[facing=south]"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "refurbished_furniture:television[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "shelf_wide",
+  "category": "shelf",
+  "placement": "wall",
+  "size": [
+   3,
+   2,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     1,
+     1,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     2,
+     1,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   }
+  ]
+ },
+ {
+  "id": "shelf_chiseled",
+  "category": "shelf",
+  "placement": "wall",
+  "size": [
+   3,
+   2,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:chiseled_bookshelf[facing=south]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     1,
+     1,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     2,
+     1,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   }
+  ]
+ },
+ {
+  "id": "shelf_tall",
+  "category": "shelf",
+  "placement": "wall",
+  "size": [
+   2,
+   3,
+   1
+  ],
+  "requires": [],
+  "weight": 8,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     0,
+     2,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     1,
+     1,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   },
+   {
+    "p": [
+     1,
+     2,
+     0
+    ],
+    "s": "minecraft:bookshelf"
+   }
+  ]
+ },
+ {
+  "id": "shelf_mcw",
+  "category": "shelf",
+  "placement": "wall",
+  "size": [
+   3,
+   2,
+   1
+  ],
+  "requires": [
+   "mcwfurnitures"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_bookshelf[facing=south]"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "mcwfurnitures:oak_bookshelf[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_bookshelf[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     1,
+     0
+    ],
+    "s": "mcwfurnitures:oak_bookshelf[facing=south]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_bookshelf[facing=south]"
+   },
+   {
+    "p": [
+     2,
+     1,
+     0
+    ],
+    "s": "mcwfurnitures:oak_bookshelf[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "lamp_post",
+  "category": "lamp",
+  "placement": "corner",
+  "size": [
+   1,
+   2,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:oak_fence"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "minecraft:lantern[hanging=false]"
+   }
+  ]
+ },
+ {
+  "id": "lamp_rf",
+  "category": "lamp",
+  "placement": "corner",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:COLOR_lamp"
+   }
+  ]
+ },
+ {
+  "id": "plant_0",
+  "category": "plant",
+  "placement": "corner",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:potted_azalea_bush"
+   }
+  ]
+ },
+ {
+  "id": "plant_1",
+  "category": "plant",
+  "placement": "corner",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:potted_flowering_azalea_bush"
+   }
+  ]
+ },
+ {
+  "id": "plant_2",
+  "category": "plant",
+  "placement": "corner",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:potted_fern"
+   }
+  ]
+ },
+ {
+  "id": "plant_3",
+  "category": "plant",
+  "placement": "corner",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:potted_bamboo"
+   }
+  ]
+ },
+ {
+  "id": "plant_4",
+  "category": "plant",
+  "placement": "corner",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:potted_red_tulip"
+   }
+  ]
+ },
+ {
+  "id": "counter_barrels",
+  "category": "kitchen_counter",
+  "placement": "wall",
+  "size": [
+   2,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=up]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=up]"
+   }
+  ]
+ },
+ {
+  "id": "counter_crafting",
+  "category": "kitchen_counter",
+  "placement": "wall",
+  "size": [
+   3,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 6,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=up]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:crafting_table"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=up]"
+   }
+  ]
+ },
+ {
+  "id": "counter_mcw",
+  "category": "kitchen_counter",
+  "placement": "wall",
+  "size": [
+   2,
+   1,
+   1
+  ],
+  "requires": [
+   "mcwfurnitures"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_counter[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_counter[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "counter_mcw_cabinets",
+  "category": "kitchen_counter",
+  "placement": "wall",
+  "size": [
+   2,
+   3,
+   1
+  ],
+  "requires": [
+   "mcwfurnitures"
+  ],
+  "weight": 14,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_counter[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_counter[facing=south]"
+   },
+   {
+    "p": [
+     0,
+     2,
+     0
+    ],
+    "s": "mcwfurnitures:oak_kitchen_cabinet[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     2,
+     0
+    ],
+    "s": "mcwfurnitures:oak_kitchen_cabinet[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "counter_rf",
+  "category": "kitchen_counter",
+  "placement": "wall",
+  "size": [
+   3,
+   1,
+   1
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_kitchen_cabinetry[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_kitchen_drawer[facing=south]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_kitchen_cabinetry[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "stove_smoker",
+  "category": "stove",
+  "placement": "wall",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:smoker[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "stove_double",
+  "category": "stove",
+  "placement": "wall",
+  "size": [
+   2,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:smoker[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:furnace[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "stove_rf",
+  "category": "stove",
+  "placement": "wall",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:light_stove[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "stove_rf_hood",
+  "category": "stove",
+  "placement": "wall",
+  "size": [
+   1,
+   3,
+   1
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 14,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:light_stove[facing=south]"
+   },
+   {
+    "p": [
+     0,
+     2,
+     0
+    ],
+    "s": "refurbished_furniture:light_range_hood[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "sink_cauldron",
+  "category": "kitchen_sink",
+  "placement": "window",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:water_cauldron[level=3]"
+   }
+  ]
+ },
+ {
+  "id": "sink_mcw",
+  "category": "kitchen_sink",
+  "placement": "window",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [
+   "mcwfurnitures"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_kitchen_sink[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "sink_rf",
+  "category": "kitchen_sink",
+  "placement": "window",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_kitchen_sink[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "fridge_rf",
+  "category": "fridge",
+  "placement": "wall",
+  "size": [
+   1,
+   2,
+   1
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:light_freezer[facing=south]"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "refurbished_furniture:light_fridge[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "dining_table",
+  "category": "dining",
+  "placement": "centre",
+  "size": [
+   4,
+   2,
+   4
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     1,
+     0,
+     1
+    ],
+    "s": "minecraft:oak_fence"
+   },
+   {
+    "p": [
+     2,
+     0,
+     1
+    ],
+    "s": "minecraft:oak_fence"
+   },
+   {
+    "p": [
+     1,
+     0,
+     2
+    ],
+    "s": "minecraft:oak_fence"
+   },
+   {
+    "p": [
+     2,
+     0,
+     2
+    ],
+    "s": "minecraft:oak_fence"
+   },
+   {
+    "p": [
+     1,
+     1,
+     1
+    ],
+    "s": "minecraft:oak_pressure_plate"
+   },
+   {
+    "p": [
+     2,
+     1,
+     1
+    ],
+    "s": "minecraft:oak_pressure_plate"
+   },
+   {
+    "p": [
+     1,
+     1,
+     2
+    ],
+    "s": "minecraft:oak_pressure_plate"
+   },
+   {
+    "p": [
+     2,
+     1,
+     2
+    ],
+    "s": "minecraft:oak_pressure_plate"
+   },
+   {
+    "p": [
+     0,
+     0,
+     1
+    ],
+    "s": "minecraft:oak_stairs[facing=west]"
+   },
+   {
+    "p": [
+     0,
+     0,
+     2
+    ],
+    "s": "minecraft:oak_stairs[facing=west]"
+   },
+   {
+    "p": [
+     3,
+     0,
+     1
+    ],
+    "s": "minecraft:oak_stairs[facing=east]"
+   },
+   {
+    "p": [
+     3,
+     0,
+     2
+    ],
+    "s": "minecraft:oak_stairs[facing=east]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:oak_stairs[facing=north]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "minecraft:oak_stairs[facing=north]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     3
+    ],
+    "s": "minecraft:oak_stairs[facing=south]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     3
+    ],
+    "s": "minecraft:oak_stairs[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "dining_mcw",
+  "category": "dining",
+  "placement": "centre",
+  "size": [
+   4,
+   1,
+   4
+  ],
+  "requires": [
+   "mcwfurnitures"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     1,
+     0,
+     1
+    ],
+    "s": "mcwfurnitures:oak_table"
+   },
+   {
+    "p": [
+     2,
+     0,
+     1
+    ],
+    "s": "mcwfurnitures:oak_table"
+   },
+   {
+    "p": [
+     1,
+     0,
+     2
+    ],
+    "s": "mcwfurnitures:oak_table"
+   },
+   {
+    "p": [
+     2,
+     0,
+     2
+    ],
+    "s": "mcwfurnitures:oak_table"
+   },
+   {
+    "p": [
+     0,
+     0,
+     1
+    ],
+    "s": "mcwfurnitures:oak_chair[facing=east]"
+   },
+   {
+    "p": [
+     0,
+     0,
+     2
+    ],
+    "s": "mcwfurnitures:oak_chair[facing=east]"
+   },
+   {
+    "p": [
+     3,
+     0,
+     1
+    ],
+    "s": "mcwfurnitures:oak_chair[facing=west]"
+   },
+   {
+    "p": [
+     3,
+     0,
+     2
+    ],
+    "s": "mcwfurnitures:oak_chair[facing=west]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_chair[facing=south]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_chair[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     3
+    ],
+    "s": "mcwfurnitures:oak_chair[facing=north]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     3
+    ],
+    "s": "mcwfurnitures:oak_chair[facing=north]"
+   }
+  ]
+ },
+ {
+  "id": "dining_rf",
+  "category": "dining",
+  "placement": "centre",
+  "size": [
+   4,
+   1,
+   4
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     1,
+     0,
+     1
+    ],
+    "s": "refurbished_furniture:oak_table"
+   },
+   {
+    "p": [
+     2,
+     0,
+     1
+    ],
+    "s": "refurbished_furniture:oak_table"
+   },
+   {
+    "p": [
+     1,
+     0,
+     2
+    ],
+    "s": "refurbished_furniture:oak_table"
+   },
+   {
+    "p": [
+     2,
+     0,
+     2
+    ],
+    "s": "refurbished_furniture:oak_table"
+   },
+   {
+    "p": [
+     0,
+     0,
+     1
+    ],
+    "s": "refurbished_furniture:oak_chair[facing=east,tucked=false]"
+   },
+   {
+    "p": [
+     0,
+     0,
+     2
+    ],
+    "s": "refurbished_furniture:oak_chair[facing=east,tucked=false]"
+   },
+   {
+    "p": [
+     3,
+     0,
+     1
+    ],
+    "s": "refurbished_furniture:oak_chair[facing=west,tucked=false]"
+   },
+   {
+    "p": [
+     3,
+     0,
+     2
+    ],
+    "s": "refurbished_furniture:oak_chair[facing=west,tucked=false]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_chair[facing=south,tucked=false]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_chair[facing=south,tucked=false]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     3
+    ],
+    "s": "refurbished_furniture:oak_chair[facing=north,tucked=false]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     3
+    ],
+    "s": "refurbished_furniture:oak_chair[facing=north,tucked=false]"
+   }
+  ]
+ },
+ {
+  "id": "dining_small",
+  "category": "dining_small",
+  "placement": "centre",
+  "size": [
+   3,
+   2,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:oak_stairs[facing=west]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:oak_fence"
+   },
+   {
+    "p": [
+     1,
+     1,
+     0
+    ],
+    "s": "minecraft:oak_pressure_plate"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "minecraft:oak_stairs[facing=east]"
+   }
+  ]
+ },
+ {
+  "id": "dining_small_mcw",
+  "category": "dining_small",
+  "placement": "centre",
+  "size": [
+   3,
+   1,
+   1
+  ],
+  "requires": [
+   "mcwfurnitures"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_chair[facing=east]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_table"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_chair[facing=west]"
+   }
+  ]
+ },
+ {
+  "id": "lectern",
+  "category": "lectern",
+  "placement": "window",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:lectern[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "bath_cauldrons",
+  "category": "bath",
+  "placement": "wall",
+  "size": [
+   2,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:water_cauldron[level=3]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:water_cauldron[level=3]"
+   }
+  ]
+ },
+ {
+  "id": "bath_rf",
+  "category": "bath",
+  "placement": "wall",
+  "size": [
+   2,
+   1,
+   1
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:COLOR_bath[facing=east,type=bottom]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:COLOR_bath[facing=east,type=top]"
+   }
+  ]
+ },
+ {
+  "id": "toilet_quartz",
+  "category": "toilet",
+  "placement": "corner",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:quartz_stairs[facing=north]"
+   }
+  ]
+ },
+ {
+  "id": "toilet_rf",
+  "category": "toilet",
+  "placement": "corner",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:white_toilet[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "basin_cauldron",
+  "category": "basin",
+  "placement": "window",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:water_cauldron[level=1]"
+   }
+  ]
+ },
+ {
+  "id": "basin_rf",
+  "category": "basin",
+  "placement": "window",
+  "size": [
+   1,
+   1,
+   1
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:white_basin[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "workbench",
+  "category": "workshop",
+  "placement": "wall",
+  "size": [
+   3,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:crafting_table"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:smithing_table"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "minecraft:stonecutter[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "workbench_loom",
+  "category": "workshop",
+  "placement": "wall",
+  "size": [
+   3,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:crafting_table"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:loom[facing=south]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "minecraft:cartography_table"
+   }
+  ]
+ },
+ {
+  "id": "workbench_rf",
+  "category": "workshop",
+  "placement": "wall",
+  "size": [
+   2,
+   1,
+   1
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:workbench[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:crafting_table"
+   }
+  ]
+ },
+ {
+  "id": "forge",
+  "category": "forge",
+  "placement": "wall",
+  "size": [
+   3,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:blast_furnace[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:anvil[facing=east]"
+   },
+   {
+    "p": [
+     2,
+     0,
+     0
+    ],
+    "s": "minecraft:grindstone[face=floor,facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "storage_chests",
+  "category": "storage",
+  "placement": "wall",
+  "size": [
+   2,
+   1,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:chest[facing=south,type=single]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:chest[facing=south,type=single]"
+   }
+  ]
+ },
+ {
+  "id": "storage_barrels",
+  "category": "storage",
+  "placement": "wall",
+  "size": [
+   2,
+   2,
+   1
+  ],
+  "requires": [],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "minecraft:barrel[facing=south]"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "minecraft:barrel[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     1,
+     0
+    ],
+    "s": "minecraft:barrel[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "storage_mcw",
+  "category": "storage",
+  "placement": "wall",
+  "size": [
+   2,
+   1,
+   1
+  ],
+  "requires": [
+   "mcwfurnitures"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_drawer[facing=south]"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "mcwfurnitures:oak_triple_drawer[facing=south]"
+   }
+  ]
+ },
+ {
+  "id": "storage_rf",
+  "category": "storage",
+  "placement": "wall",
+  "size": [
+   2,
+   2,
+   1
+  ],
+  "requires": [
+   "refurbished_furniture"
+  ],
+  "weight": 10,
+  "blocks": [
+   {
+    "p": [
+     0,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_crate"
+   },
+   {
+    "p": [
+     1,
+     0,
+     0
+    ],
+    "s": "refurbished_furniture:oak_crate"
+   },
+   {
+    "p": [
+     0,
+     1,
+     0
+    ],
+    "s": "refurbished_furniture:oak_crate"
+   },
+   {
+    "p": [
+     1,
+     1,
+     0
+    ],
+    "s": "minecraft:barrel[facing=up]"
+   }
+  ]
+ }
+]

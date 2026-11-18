@@ -199,6 +199,35 @@ public final class ServerOps {
         submit(p, level, set, r.id(), r.partialOk(), centre(bb));
     }
 
+    /** Interior: the room is detected again here and furnished with the same type and seed as the client preview. */
+    public static void interior(ServerPlayer p, InteriorRequest r) {
+        if (Applier.busy(p.getUUID())) {
+            tell(p, "stilwerk.error.busy");
+            return;
+        }
+        ServerLevel level = p.serverLevel();
+        BoundingBox around = new BoundingBox(r.clicked()).inflatedBy(com.stilwerk.interior.RoomDetector.MAX_SPAN_XZ);
+        if (!nearby(p, new BoundingBox(r.clicked())) || !loaded(level, around)) {
+            tell(p, "stilwerk.error.unloaded");
+            return;
+        }
+        var detected = com.stilwerk.interior.RoomDetector.detect(level, r.clicked(), r.face());
+        if (detected.room() == null) {
+            tell(p, detected.error());
+            return;
+        }
+        var room = detected.room();
+        var type = com.stilwerk.interior.ModuleLibrary.type(r.roomType());
+        var result = com.stilwerk.interior.InteriorGenerator.generate(level, room, type, r.seed(),
+                com.stilwerk.interior.InteriorGenerator.houseWood(level, room));
+        int limit = ServerConfig.maxBlocks(p.isCreative());
+        if (result.changes().size() > limit) {
+            tell(p, "stilwerk.error.too_big", limit);
+            return;
+        }
+        submit(p, level, result.changes(), r.id(), r.partialOk(), room.start());
+    }
+
     private static BlockPos centre(BoundingBox bb) {
         return new BlockPos((bb.minX() + bb.maxX()) / 2, bb.maxY() + 1, (bb.minZ() + bb.maxZ()) / 2);
     }

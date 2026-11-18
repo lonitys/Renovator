@@ -1,0 +1,303 @@
+[
+ {
+  "id": "bedroom",
+  "rug": true,
+  "light": true,
+  "slots": [
+   {
+    "category": "bed",
+    "min": 1,
+    "max": 1,
+    "priority": 100,
+    "prefer": "far_from_door"
+   },
+   {
+    "category": "wardrobe",
+    "min": 1,
+    "max": 1,
+    "priority": 80,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "desk",
+    "min": 0,
+    "max": 1,
+    "priority": 50,
+    "prefer": "near_window"
+   },
+   {
+    "category": "storage",
+    "min": 0,
+    "max": 1,
+    "priority": 30,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "plant",
+    "min": 1,
+    "max": 2,
+    "priority": 20,
+    "prefer": "corner"
+   }
+  ]
+ },
+ {
+  "id": "living",
+  "rug": true,
+  "light": true,
+  "slots": [
+   {
+    "category": "sofa",
+    "min": 1,
+    "max": 1,
+    "priority": 100,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "media",
+    "min": 0,
+    "max": 1,
+    "priority": 70,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "shelf",
+    "min": 0,
+    "max": 2,
+    "priority": 60,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "lamp",
+    "min": 0,
+    "max": 1,
+    "priority": 40,
+    "prefer": "corner"
+   },
+   {
+    "category": "plant",
+    "min": 1,
+    "max": 3,
+    "priority": 30,
+    "prefer": "corner"
+   }
+  ]
+ },
+ {
+  "id": "kitchen",
+  "rug": false,
+  "light": true,
+  "slots": [
+   {
+    "category": "stove",
+    "min": 1,
+    "max": 1,
+    "priority": 100,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "kitchen_sink",
+    "min": 1,
+    "max": 1,
+    "priority": 95,
+    "prefer": "near_window"
+   },
+   {
+    "category": "fridge",
+    "min": 0,
+    "max": 1,
+    "priority": 90,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "kitchen_counter",
+    "min": 1,
+    "max": 3,
+    "priority": 85,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "dining_small",
+    "min": 0,
+    "max": 1,
+    "priority": 40,
+    "prefer": "centre"
+   },
+   {
+    "category": "plant",
+    "min": 0,
+    "max": 1,
+    "priority": 10,
+    "prefer": "corner"
+   }
+  ]
+ },
+ {
+  "id": "dining",
+  "rug": false,
+  "light": true,
+  "slots": [
+   {
+    "category": "dining",
+    "min": 1,
+    "max": 1,
+    "priority": 100,
+    "prefer": "centre"
+   },
+   {
+    "category": "storage",
+    "min": 0,
+    "max": 2,
+    "priority": 50,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "shelf",
+    "min": 0,
+    "max": 1,
+    "priority": 40,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "plant",
+    "min": 1,
+    "max": 3,
+    "priority": 20,
+    "prefer": "corner"
+   }
+  ]
+ },
+ {
+  "id": "library",
+  "rug": true,
+  "light": true,
+  "slots": [
+   {
+    "category": "shelf",
+    "min": 2,
+    "max": 6,
+    "priority": 100,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "lectern",
+    "min": 1,
+    "max": 1,
+    "priority": 80,
+    "prefer": "near_window"
+   },
+   {
+    "category": "desk",
+    "min": 0,
+    "max": 1,
+    "priority": 70,
+    "prefer": "near_window"
+   },
+   {
+    "category": "lamp",
+    "min": 0,
+    "max": 2,
+    "priority": 40,
+    "prefer": "corner"
+   },
+   {
+    "category": "plant",
+    "min": 0,
+    "max": 2,
+    "priority": 20,
+    "prefer": "corner"
+   }
+  ]
+ },
+ {
+  "id": "bath",
+  "rug": false,
+  "light": true,
+  "slots": [
+   {
+    "category": "bath",
+    "min": 1,
+    "max": 1,
+    "priority": 100,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "toilet",
+    "min": 1,
+    "max": 1,
+    "priority": 90,
+    "prefer": "corner"
+   },
+   {
+    "category": "basin",
+    "min": 1,
+    "max": 1,
+    "priority": 80,
+    "prefer": "near_window"
+   },
+   {
+    "category": "plant",
+    "min": 0,
+    "max": 1,
+    "priority": 20,
+    "prefer": "corner"
+   }
+  ]
+ },
+ {
+  "id": "workshop",
+  "rug": false,
+  "light": true,
+  "slots": [
+   {
+    "category": "workshop",
+    "min": 1,
+    "max": 1,
+    "priority": 100,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "forge",
+    "min": 1,
+    "max": 1,
+    "priority": 95,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "storage",
+    "min": 1,
+    "max": 2,
+    "priority": 60,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "lamp",
+    "min": 0,
+    "max": 1,
+    "priority": 20,
+    "prefer": "corner"
+   }
+  ]
+ },
+ {
+  "id": "storage",
+  "rug": false,
+  "light": true,
+  "slots": [
+   {
+    "category": "storage",
+    "min": 2,
+    "max": 8,
+    "priority": 100,
+    "prefer": "near_wall"
+   },
+   {
+    "category": "lamp",
+    "min": 0,
+    "max": 1,
+    "priority": 10,
+    "prefer": "corner"
+   }
+  ]
+ }
+]

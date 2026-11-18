@@ -24,6 +24,11 @@ public final class WandClient {
             }
             case SWAP -> openSwap();
             case BLUEPRINT -> Minecraft.getInstance().setScreen(new BlueprintMenuScreen());
+            case DETAILS -> {
+                if (p.isShiftKeyDown() || ClientState.selection() == null) DetailController.targeted(ctx.getClickedPos());
+                else openDetails();
+            }
+            case INTERIOR -> InteriorController.open(ctx.getClickedPos(), ctx.getClickedFace());
         }
         return InteractionResult.SUCCESS;
     }
@@ -36,7 +41,19 @@ public final class WandClient {
             }
             case SWAP -> openSwap();
             case BLUEPRINT -> Minecraft.getInstance().setScreen(new BlueprintMenuScreen());
+            case DETAILS -> {
+                if (ClientState.selection() != null) openDetails();
+                else ClientState.actionbar(Component.translatable("stilwerk.hint.details"));
+            }
+            case INTERIOR -> ClientState.actionbar(Component.translatable("stilwerk.hint.interior"));
         }
+    }
+
+    public static void openDetails() {
+        var sel = ClientState.selection();
+        if (sel == null) return;
+        var found = DetailController.findForSelection(sel);
+        if (found != null) Minecraft.getInstance().setScreen(new com.stilwerk.client.screen.DetailScreen(sel, found));
     }
 
     public static void openSwap() {

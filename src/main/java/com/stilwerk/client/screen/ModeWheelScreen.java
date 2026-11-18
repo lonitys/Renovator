@@ -12,8 +12,8 @@ import org.jetbrains.annotations.Nullable;
 
 /** Hold the mode key, point at a mode, release (or click) to choose. */
 public final class ModeWheelScreen extends StilwerkScreen {
-    private static final int RADIUS = 62, TILE = 54;
-    private static final double[] ANGLES = {-90, 30, 150};
+    private static final int RADIUS = 74, TILE = 54;
+    private static final double[] ANGLES = {-90, -18, 54, 126, 198};
     /** Dev scene: keep the wheel open without the key held. */
     public static boolean holdOpenForTests;
 
@@ -55,7 +55,7 @@ public final class ModeWheelScreen extends StilwerkScreen {
         super.render(g, mouseX, mouseY, partialTick);
         WandMode hover = hovered(mouseX, mouseY);
         g.drawCenteredString(font, title, width / 2, height / 2 - RADIUS - TILE / 2 - 16, 0xFFE8D9A8);
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < ANGLES.length; i++) {
             WandMode m = WandMode.values()[i];
             int x = tileX(i), y = tileY(i);
             boolean current = m == ClientState.mode, hot = m == hover;

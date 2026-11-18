@@ -8,7 +8,9 @@ import net.minecraft.world.item.Items;
 public enum WandMode {
     SELECT(Items.SPYGLASS),
     SWAP(Items.BRUSH),
-    BLUEPRINT(Items.MAP);
+    BLUEPRINT(Items.MAP),
+    DETAILS(Items.FLOWER_POT),
+    INTERIOR(Items.RED_BED);
 
     private final Item icon;
 

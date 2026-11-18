@@ -83,6 +83,8 @@
   "stilwerk.mix.weight": "Weight",
   "stilwerk.mode.blueprint": "Blueprint",
   "stilwerk.mode.changed": "Mode: %s",
+  "stilwerk.mode.details": "Details",
+  "stilwerk.mode.interior": "Interior",
   "stilwerk.mode.select": "Select",
   "stilwerk.mode.swap": "Style swap",
   "stilwerk.pattern.edges": "Edges",

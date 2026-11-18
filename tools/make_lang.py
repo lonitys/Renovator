@@ -21,6 +21,8 @@ T = {
     "stilwerk.mode.select": ("Markieren", "Select"),
     "stilwerk.mode.swap": ("Stil-Tausch", "Style swap"),
     "stilwerk.mode.blueprint": ("Bauplan", "Blueprint"),
+    "stilwerk.mode.details": ("Details", "Details"),
+    "stilwerk.mode.interior": ("Innen", "Interior"),
     "stilwerk.mode.changed": ("Modus: %s", "Mode: %s"),
     "stilwerk.wheel.title": ("Architektenstab", "Architect's Wand"),
     "stilwerk.wheel.hint": ("Zeigen und loslassen", "Point and release"),

@@ -30,6 +30,8 @@ neoForge {
             if (project.hasProperty('quickPlay')) {
                 programArguments.addAll('--quickPlaySingleplayer', project.property('quickPlay').toString())
                 systemProperty(project.hasProperty('probe') ? 'renovator.probe' : project.hasProperty('gallery') ? 'renovator.gallery' : 'renovator.devScene', 'true')
+                // DevScene extra: a real schematic as a projection, -PdevSchem=<file>
+                if (project.hasProperty('devSchem')) systemProperty('renovator.devSchem', project.property('devSchem').toString())
             }
         }
         server {

@@ -69,6 +69,8 @@ public final class DevScene {
     private static BlockPos o; // hut corner
     private static BlockPos copyAt;
     private static BlockPos projO;
+    private static BlockPos schemAt;
+    private static net.minecraft.core.Vec3i schemSize;
     private static int fails;
 
     private DevScene() {}
@@ -405,7 +407,54 @@ public final class DevScene {
                 shot(mc, "projection_finished");
                 com.renovator.config.ClientConfig.setProjectionView("all");
             }
+            // optional: a real schematic as a projection (-Drenovator.devSchem=<file>), for size and looks
             case 1110 -> {
+                String file = System.getProperty("renovator.devSchem");
+                if (file == null) {
+                    ticks = 1199;
+                    return;
+                }
+                ServerPlayer sp = server.getPlayerList().getPlayer(mc.player.getUUID());
+                schemAt = o.offset(-60, 0, -10);
+                server.execute(() -> {
+                    try {
+                        long t0 = System.nanoTime();
+                        var bp = com.renovator.blueprint.importer.Importers.load(java.nio.file.Path.of(file), net.minecraft.core.registries.BuiltInRegistries.BLOCK.asLookup()).blueprint();
+                        var plan = com.renovator.blueprint.BlueprintPlanner.plan(server.overworld(), bp, schemAt, com.renovator.swap.SwapMapping.EMPTY,
+                                java.util.Map.of(), 1, new com.renovator.blueprint.BlueprintPlanner.Options(false, false));
+                        var pr = com.renovator.projection.ProjectionOps.create(sp, server.overworld(), plan.changes(), "renovator.projection.label.blueprint", bp.meta().name());
+                        schemSize = bp.size();
+                        LOG.info("[renovator dev scene] schematic {}: size {}, {} cells, planned+synced in {} ms", file, bp.size(), pr.cellCount(),
+                                (System.nanoTime() - t0) / 1_000_000);
+                    } catch (Exception ex) {
+                        LOG.error("[renovator dev scene] schematic failed", ex);
+                        fails++;
+                    }
+                });
+                com.renovator.config.ClientConfig.setProjectionView("all");
+            }
+            case 1130 -> {
+                if (schemSize == null) return;
+                double cx = schemAt.getX() + schemSize.getX() / 2.0, cz = schemAt.getZ() + schemSize.getZ() + Math.max(schemSize.getX(), schemSize.getY()) * 0.9;
+                teleport(server, mc, cx, schemAt.getY() + schemSize.getY() * 0.6, cz, 180, 20);
+            }
+            case 1150 -> {
+                var f = com.renovator.client.projection.ClientProjections.focusedProjection();
+                check("schem_projection", f != null && f.size() > 0, f == null ? 0 : f.size());
+                shot(mc, "schem_blue");
+                com.renovator.client.projection.ClientProjections.cycleStyle();
+            }
+            case 1170 -> {
+                shot(mc, "schem_real");
+                com.renovator.client.projection.ClientProjections.cycleStyle();
+                com.renovator.config.ClientConfig.setProjectionView("up_to");
+                com.renovator.client.projection.ClientProjections.layer(4);
+            }
+            case 1190 -> {
+                shot(mc, "schem_up_to");
+                com.renovator.config.ClientConfig.setProjectionView("all");
+            }
+            case 1200 -> {
                 LOG.info("[renovator dev scene] DONE with {} failed checks", fails);
                 mc.stop();
             }

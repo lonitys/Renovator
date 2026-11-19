@@ -224,7 +224,9 @@ public final class ClientProjections {
         List<ClientProjection> here = here();
         if (here.isEmpty()) return;
         int budget = Math.max(500, SCAN_PER_TICK / here.size());
+        boolean near = mc.player != null && mc.level.getGameTime() % 2 == 0;
         for (ClientProjection cp : here) {
+            if (near) cp.scanNear(mc.level, mc.player.blockPosition(), 7);
             cp.scan(mc.level, budget);
             if (cp.finished() && !cp.removeRequested) {
                 cp.removeRequested = true;

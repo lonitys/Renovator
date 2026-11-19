@@ -128,6 +128,28 @@ public final class ClientProjection {
         return changed;
     }
 
+    /** Re-checks the cells within {@code r} blocks of {@code centre} (what the player is building right now). */
+    boolean scanNear(BlockGetter level, BlockPos centre, int r) {
+        boolean changed = false;
+        BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
+        for (int dx = -r; dx <= r; dx++)
+            for (int dy = -r; dy <= r; dy++)
+                for (int dz = -r; dz <= r; dz++) {
+                    m.set(centre.getX() + dx, centre.getY() + dy, centre.getZ() + dz);
+                    int i = index.get(m.asLong());
+                    if (i < 0) continue;
+                    byte s = (byte) CellState.of(level.getBlockState(m), target[i], old[i]).ordinal();
+                    if (s == state[i]) continue;
+                    count(state[i], -1);
+                    count(s, 1);
+                    state[i] = s;
+                    LayerMesh mesh = meshes.get(y(i));
+                    if (mesh != null) mesh.dirty = true;
+                    changed = true;
+                }
+        return changed;
+    }
+
     private void count(byte s, int d) {
         if (s == CellState.DONE.ordinal()) done += d;
         else if (s == CellState.BLOCKED.ordinal()) blocked += d;

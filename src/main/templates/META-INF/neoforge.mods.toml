@@ -7,8 +7,12 @@ modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 authors="Lonitys"
+logoFile="renovator_logo.png"
+logoBlur=false
 description='''
-Mark buildings, swap their style by block family, add detail with mix palettes, and copy, import and place blueprints.
+Renovate any building with one wand: swap its style by block family, mix palettes instead of flat walls, get detail
+suggestions, furnish rooms (vanilla or Macaw's / Refurbished furniture), copy buildings and import .schem/.litematic/.nbt
+blueprints, and build them as ghost projections layer by layer - by hand or automatically in survival.
 '''
 
 [[dependencies.${mod_id}]]
@@ -29,5 +33,19 @@ Mark buildings, swap their style by block family, add detail with mix palettes, 
     modId="projecte"
     type="optional"
     versionRange="[1.1.0,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="mcwfurnitures"
+    type="optional"
+    versionRange="[0,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="refurbished_furniture"
+    type="optional"
+    versionRange="[0,)"
     ordering="NONE"
     side="BOTH"

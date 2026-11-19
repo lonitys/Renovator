@@ -13,7 +13,14 @@ import org.jetbrains.annotations.Nullable;
 /** Hold the mode key, point at a mode, release (or click) to choose. */
 public final class ModeWheelScreen extends RenovatorScreen {
     private static final int RADIUS = 74, TILE = 54;
-    private static final double[] ANGLES = {-90, -18, 54, 126, 198};
+    /** Tile angles: evenly around the circle, the first mode at the top. */
+    private static final double[] ANGLES = angles(WandMode.values().length);
+
+    private static double[] angles(int n) {
+        double[] a = new double[n];
+        for (int i = 0; i < n; i++) a[i] = -90 + 360.0 * i / n;
+        return a;
+    }
     /** Dev scene: keep the wheel open without the key held. */
     public static boolean holdOpenForTests;
 

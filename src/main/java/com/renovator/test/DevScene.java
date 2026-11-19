@@ -193,7 +193,7 @@ public final class DevScene {
                 PreviewController.cancel();
                 ResolvedSelection res = hutBox().resolve(mc.level, 100_000);
                 Blueprint bp = Blueprint.capture(mc.level, res, true, mc.level.registryAccess(),
-                        new BlueprintMeta("Nordisches Haus", "dev", System.currentTimeMillis(), "renovator"));
+                        new BlueprintMeta("Nordic house", "dev", System.currentTimeMillis(), "renovator"));
                 try {
                     ClientLibrary.save(bp);
                 } catch (java.io.IOException ex) {

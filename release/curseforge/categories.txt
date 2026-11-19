@@ -1,0 +1,5 @@
+Main category: Utility & QoL
+Additional: Cosmetic, Miscellaneous
+Tags/keywords: building, renovation, style swap, blueprints, schematics, litematic, projection, interior, furniture, survival, ProjectE
+Game version: 1.21.1 · Loader: NeoForge · Java 21 · Environment: client and server
+Optional dependencies: ProjectE, Macaw's Furniture, Refurbished Furniture

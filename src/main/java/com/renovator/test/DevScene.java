@@ -68,6 +68,7 @@ public final class DevScene {
     private static int ticks = -1;
     private static BlockPos o; // hut corner
     private static BlockPos copyAt;
+    private static BlockPos projO;
     private static int fails;
 
     private DevScene() {}
@@ -331,7 +332,80 @@ public final class DevScene {
                 check("interior_placed_bed", bed, roomO);
                 shot(mc, "interior_placed");
             }
+            // ---------------------------------------------------------------- build projection
             case 890 -> {
+                projO = o.offset(-14, 0, 0);
+                ServerPlayer sp = server.getPlayerList().getPlayer(mc.player.getUUID());
+                server.execute(() -> {
+                    ServerLevel level = server.overworld();
+                    for (BlockPos q : BlockPos.betweenClosed(projO.offset(-2, 0, -2), projO.offset(7, 8, 10))) level.setBlock(q, Blocks.AIR.defaultBlockState(), 2);
+                    com.renovator.projection.ProjectionOps.create(sp, level, projectionHouse(projO), "renovator.projection.label.blueprint", "Dev house");
+                    level.setBlock(projO.offset(4, 1, 3), Blocks.COBBLESTONE.defaultBlockState(), 2); // in the way: shown red
+                });
+                com.renovator.config.ClientConfig.setProjectionView("all");
+                com.renovator.config.ClientConfig.setProjectionStyle("blue");
+            }
+            case 900 -> teleport(server, mc, projO.getX() + 2.5, projO.getY() + 3, projO.getZ() + 12.5, 180, 18);
+            case 925 -> {
+                check("projection_synced", com.renovator.client.projection.ClientProjections.all().size() == 1,
+                        com.renovator.client.projection.ClientProjections.all().size());
+                shot(mc, "projection_blue");
+            }
+            case 927 -> com.renovator.client.projection.ClientProjections.cycleStyle();
+            case 945 -> shot(mc, "projection_real");
+            case 947 -> {
+                com.renovator.client.projection.ClientProjections.cycleStyle();
+                com.renovator.config.ClientConfig.setProjectionView("single");
+                var f = com.renovator.client.projection.ClientProjections.focusedProjection();
+                check("projection_focus_layer", f != null && com.renovator.client.projection.ClientProjections.layerY() == projO.getY(),
+                        com.renovator.client.projection.ClientProjections.layerY());
+            }
+            case 965 -> shot(mc, "projection_layer1");
+            case 967 -> {
+                server.execute(() -> {
+                    ServerPlayer p = server.getPlayerList().getPlayer(mc.player.getUUID());
+                    p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(net.minecraft.world.item.Items.OAK_STAIRS, 16));
+                });
+                // look down at the front step from 3 blocks away
+                teleport(server, mc, projO.getX() + 2.5, projO.getY() + 1, projO.getZ() + 8.5, 180, 35.2f);
+            }
+            case 985 -> net.minecraft.client.KeyMapping.click(mc.options.keyUse.getKey());
+            case 1000 -> {
+                BlockState step = mc.level.getBlockState(projO.offset(2, 0, 5));
+                check("projection_easy_place", step.is(Blocks.OAK_STAIRS) && step.getValue(net.minecraft.world.level.block.StairBlock.FACING) == Direction.NORTH, step);
+                shot(mc, "projection_easy_place");
+            }
+            case 1002 -> {
+                var f = com.renovator.client.projection.ClientProjections.focusedProjection();
+                if (f != null) PacketDistributor.sendToServer(new com.renovator.net.ProjectionPayloads.Build(f.id,
+                        com.renovator.net.ProjectionPayloads.Scope.LAYER, projO.getY()));
+                teleport(server, mc, projO.getX() + 2.5, projO.getY() + 3, projO.getZ() + 12.5, 180, 18);
+            }
+            case 1030 -> {
+                boolean ring = true;
+                for (int x = 0; x <= 4; x++) ring &= !mc.level.getBlockState(projO.offset(x, 0, 0)).isAir();
+                check("projection_layer_built", ring, projO);
+                shot(mc, "projection_layer_built");
+                mc.setScreen(new com.renovator.client.screen.ProjectionScreen());
+            }
+            case 1050 -> {
+                check("projection_list", mc.screen instanceof com.renovator.client.screen.ProjectionScreen, mc.screen);
+                shot(mc, "projection_list");
+                mc.setScreen(null);
+                server.execute(() -> server.overworld().setBlock(projO.offset(4, 1, 3), Blocks.AIR.defaultBlockState(), 2));
+            }
+            case 1060 -> {
+                var f = com.renovator.client.projection.ClientProjections.focusedProjection();
+                if (f != null) PacketDistributor.sendToServer(new com.renovator.net.ProjectionPayloads.Build(f.id,
+                        com.renovator.net.ProjectionPayloads.Scope.ALL, 0));
+            }
+            case 1100 -> {
+                check("projection_finished", com.renovator.client.projection.ClientProjections.all().isEmpty(),
+                        com.renovator.client.projection.ClientProjections.all().size());
+                shot(mc, "projection_finished");
+                com.renovator.config.ClientConfig.setProjectionView("all");
+            }
+            case 1110 -> {
                 LOG.info("[renovator dev scene] DONE with {} failed checks", fails);
                 mc.stop();
             }
@@ -351,6 +425,30 @@ public final class DevScene {
     }
 
     /** A closed spruce room (interior 9 x 4 x 8) with a door north and windows east and south. */
+    /** A small house as a projection: log corners, planks, door, panes, slab roof and a front step. */
+    static com.renovator.core.ChangeSet projectionHouse(BlockPos o) {
+        com.renovator.core.ChangeSet.Builder b = com.renovator.core.ChangeSet.builder();
+        BlockState air = Blocks.AIR.defaultBlockState();
+        for (int y = 0; y <= 2; y++)
+            for (int x = 0; x <= 4; x++)
+                for (int z = 0; z <= 4; z++) {
+                    boolean edge = x == 0 || x == 4 || z == 0 || z == 4;
+                    if (!edge || (x == 2 && z == 4 && y <= 1)) continue;
+                    boolean corner = (x == 0 || x == 4) && (z == 0 || z == 4);
+                    boolean pane = y == 1 && z == 2 && (x == 0 || x == 4);
+                    BlockState s = corner ? Blocks.OAK_LOG.defaultBlockState() : pane ? Blocks.GLASS_PANE.defaultBlockState() : Blocks.OAK_PLANKS.defaultBlockState();
+                    b.add(new com.renovator.core.Change(o.offset(x, y, z), air, s, null, pane));
+                }
+        BlockState door = Blocks.OAK_DOOR.defaultBlockState().setValue(DoorBlock.FACING, Direction.SOUTH);
+        b.group(java.util.List.of(new com.renovator.core.Change(o.offset(2, 0, 4), air, door.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER), null, false),
+                new com.renovator.core.Change(o.offset(2, 1, 4), air, door.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), null, false)));
+        for (int x = 0; x <= 4; x++)
+            for (int z = 0; z <= 4; z++) b.add(new com.renovator.core.Change(o.offset(x, 3, z), air, Blocks.OAK_SLAB.defaultBlockState(), null, false));
+        b.add(new com.renovator.core.Change(o.offset(2, 0, 5), air,
+                Blocks.OAK_STAIRS.defaultBlockState().setValue(net.minecraft.world.level.block.StairBlock.FACING, Direction.NORTH), null, false));
+        return b.build();
+    }
+
     static void buildRoom(ServerLevel level, BlockPos r) {
         for (int x = 0; x <= 10; x++)
             for (int z = 0; z <= 9; z++) {

@@ -4,14 +4,23 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.renovator.Renovator;
+import com.renovator.client.projection.ClientProjections;
 import com.renovator.client.screen.MaterialReportScreen;
 import com.renovator.client.screen.ModeWheelScreen;
 import com.renovator.item.WandHooks;
 import com.renovator.item.WandMode;
 import com.renovator.net.Net;
+import com.renovator.net.ProjectionPayloads;
 import com.renovator.net.SmallPayloads;
 import com.renovator.swap.Templates;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -29,6 +38,7 @@ import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -52,6 +62,8 @@ public final class ClientEvents {
             WandHooks.clientUseOn = WandClient::useOn;
             WandHooks.clientUse = WandClient::use;
             Net.clientReportHandler = r -> Minecraft.getInstance().setScreen(new MaterialReportScreen(r));
+            Net.clientProjectionSync = ClientProjections::accept;
+            Net.clientProjectionRemoved = r -> ClientProjections.removed(r.id());
         }
     }
 
@@ -98,6 +110,13 @@ public final class ClientEvents {
                 else PlacementController.mirror();
             }
             while (Keys.UNDO.consumeClick()) if (wand) PacketDistributor.sendToServer(new SmallPayloads.UndoRequest());
+            // projection keys work with any item in hand
+            boolean free = mc.screen == null;
+            while (Keys.LAYER_UP.consumeClick()) if (free) ClientProjections.layer(1);
+            while (Keys.LAYER_DOWN.consumeClick()) if (free) ClientProjections.layer(-1);
+            while (Keys.PROJECTION_VIEW.consumeClick()) if (free && ClientProjections.focusedProjection() != null) ClientProjections.cycleView();
+            while (Keys.PROJECTION_STYLE.consumeClick()) if (free && ClientProjections.focusedProjection() != null) ClientProjections.cycleStyle();
+            ClientProjections.tick();
             PlacementController.tick();
         }
 
@@ -109,7 +128,9 @@ public final class ClientEvents {
             PlacementController.render(e.getModelViewMatrix(), e.getProjectionMatrix(), cam);
             DetailController.render(e.getModelViewMatrix(), e.getProjectionMatrix(), cam);
             InteriorController.render(e.getModelViewMatrix(), e.getProjectionMatrix(), cam);
+            ClientProjections.render(e.getModelViewMatrix(), e.getProjectionMatrix(), cam);
             float pt = e.getPartialTick().getGameTimeDeltaPartialTick(false);
+            ClientProjections.renderEntities(e.getPoseStack(), cam, pt);
             PreviewController.renderEntities(e.getPoseStack(), cam, pt);
             PlacementController.renderEntities(e.getPoseStack(), cam, pt);
             DetailController.renderEntities(e.getPoseStack(), cam, pt);
@@ -135,6 +156,69 @@ public final class ClientEvents {
             if (room != null) LevelRenderer.renderLineBox(ps, lines, AABB.of(room).inflate(0.03), 0.95f, 0.5f, 0.9f, 1f);
             ps.popPose();
             buffers.endBatch(RenderType.lines());
+        }
+
+        /**
+         * Right-click with a block on a projection ghost builds it there (exact state, via the server); a wrong block
+         * says what belongs there. Sneaking keeps vanilla behaviour. Middle-click on a ghost picks the needed block.
+         */
+        @SubscribeEvent
+        public static void interact(InputEvent.InteractionKeyMappingTriggered e) {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.player == null || mc.screen != null) return;
+            if (e.isUseItem() && e.getHand() == InteractionHand.MAIN_HAND) {
+                ItemStack held = mc.player.getMainHandItem();
+                if (mc.player.isShiftKeyDown() || !(held.getItem() instanceof BlockItem)) return;
+                ClientProjections.Hit hit = ClientProjections.pick(1f);
+                if (hit == null) return;
+                e.setCanceled(true);
+                if (hit.items().contains(held.getItem())) {
+                    PacketDistributor.sendToServer(new ProjectionPayloads.Place(hit.projection().id, hit.pos()));
+                    e.setSwingHand(true);
+                } else {
+                    e.setSwingHand(false);
+                    ClientState.actionbar(Component.translatable("renovator.projection.wrong", hit.target().getBlock().getName()));
+                }
+            } else if (e.isPickBlock()) {
+                ClientProjections.Hit hit = ClientProjections.pick(1f);
+                if (hit == null) return;
+                e.setCanceled(true);
+                pickItem(mc, hit);
+            }
+        }
+
+        /** Like vanilla pick block: the needed item into the hand (creative) or from the inventory into the hotbar. */
+        private static void pickItem(Minecraft mc, ClientProjections.Hit hit) {
+            Item item = hit.target().getBlock().asItem();
+            if (!hit.items().contains(item) && !hit.items().isEmpty()) item = hit.items().iterator().next();
+            ItemStack stack = new ItemStack(item);
+            if (stack.isEmpty()) return;
+            Inventory inv = mc.player.getInventory();
+            if (mc.player.getAbilities().instabuild) {
+                inv.setPickedItem(stack);
+                mc.gameMode.handleCreativeModeItemAdd(mc.player.getItemInHand(InteractionHand.MAIN_HAND), 36 + inv.selected);
+                return;
+            }
+            int slot = inv.findSlotMatchingItem(stack);
+            if (slot == -1) {
+                ClientState.actionbar(Component.translatable("renovator.projection.not_in_inventory", stack.getHoverName()));
+            } else if (Inventory.isHotbarSlot(slot)) {
+                inv.selected = slot;
+            } else {
+                mc.gameMode.handlePickItem(slot);
+            }
+        }
+
+        @SubscribeEvent
+        public static void hud(RenderGuiEvent.Post e) {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.options.hideGui || mc.screen != null) return;
+            Component line = ClientProjections.hudLine();
+            if (line == null) return;
+            GuiGraphics g = e.getGuiGraphics();
+            int w = mc.font.width(line), x = (g.guiWidth() - w) / 2, y = g.guiHeight() - 84;
+            g.fill(x - 3, y - 2, x + w + 3, y + 10, 0x90101820);
+            g.drawString(mc.font, line, x, y, 0xFFB8D8FF);
         }
 
         @SubscribeEvent
@@ -195,6 +279,7 @@ public final class ClientEvents {
             DetailController.stop();
             InteriorController.stop();
             ClientState.resetAll();
+            ClientProjections.clear();
             Templates.setDatapack(java.util.List.of());
         }
     }

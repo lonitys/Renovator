@@ -19,9 +19,12 @@ public enum CellState {
             "attachment", "orientation", "hanging");
 
     public static CellState of(BlockState world, Change cell) {
-        if (matches(world, cell.newState())) return DONE;
+        return of(world, cell.newState(), cell.oldState());
+    }
+
+    public static CellState of(BlockState world, BlockState target, BlockState old) {
+        if (matches(world, target)) return DONE;
         if (world.isAir() || world.canBeReplaced()) return OPEN;
-        BlockState old = cell.oldState();
         if (!old.isAir() && world.is(old.getBlock())) return OPEN;
         return BLOCKED;
     }

@@ -29,6 +29,7 @@ public final class WandClient {
                 else openDetails();
             }
             case INTERIOR -> InteriorController.open(ctx.getClickedPos(), ctx.getClickedFace());
+            case PROJECTIONS -> Minecraft.getInstance().setScreen(new com.renovator.client.screen.ProjectionScreen());
         }
         return InteractionResult.SUCCESS;
     }
@@ -46,6 +47,7 @@ public final class WandClient {
                 else ClientState.actionbar(Component.translatable("renovator.hint.details"));
             }
             case INTERIOR -> ClientState.actionbar(Component.translatable("renovator.hint.interior"));
+            case PROJECTIONS -> Minecraft.getInstance().setScreen(new com.renovator.client.screen.ProjectionScreen());
         }
     }
 

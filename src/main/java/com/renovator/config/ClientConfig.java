@@ -11,6 +11,8 @@ public final class ClientConfig {
     private static final ModConfigSpec.IntValue MAX_GHOST_BLOCKS;
     private static final ModConfigSpec.IntValue FLOOD_RADIUS;
     private static final ModConfigSpec.ConfigValue<String> INTERIOR_FURNITURE;
+    private static final ModConfigSpec.ConfigValue<String> PROJECTION_STYLE;
+    private static final ModConfigSpec.ConfigValue<String> PROJECTION_VIEW;
 
     static {
         ModConfigSpec.Builder b = new ModConfigSpec.Builder();
@@ -21,6 +23,9 @@ public final class ClientConfig {
                 .defineInRange("floodRadius", 128, 4, 512);
         INTERIOR_FURNITURE = b.comment("Furniture for the interior designer: mods (all installed furniture mods), a mod id, or vanilla.")
                 .define("interiorFurniture", "mods");
+        PROJECTION_STYLE = b.comment("Projection ghosts: blue (tinted) or real (real textures, pulsing).").define("projectionStyle", "blue");
+        PROJECTION_VIEW = b.comment("Projection layers shown: all, single (current layer) or up_to (up to the current layer).")
+                .define("projectionView", "all");
         SPEC = b.build();
     }
 
@@ -44,5 +49,25 @@ public final class ClientConfig {
         if (!SPEC.isLoaded()) return;
         INTERIOR_FURNITURE.set(choice);
         INTERIOR_FURNITURE.save();
+    }
+
+    public static String projectionStyle() {
+        return SPEC.isLoaded() ? PROJECTION_STYLE.get() : PROJECTION_STYLE.getDefault();
+    }
+
+    public static void setProjectionStyle(String v) {
+        if (!SPEC.isLoaded()) return;
+        PROJECTION_STYLE.set(v);
+        PROJECTION_STYLE.save();
+    }
+
+    public static String projectionView() {
+        return SPEC.isLoaded() ? PROJECTION_VIEW.get() : PROJECTION_VIEW.getDefault();
+    }
+
+    public static void setProjectionView(String v) {
+        if (!SPEC.isLoaded()) return;
+        PROJECTION_VIEW.set(v);
+        PROJECTION_VIEW.save();
     }
 }

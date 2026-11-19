@@ -10,7 +10,8 @@ public enum WandMode {
     SWAP(Items.BRUSH),
     BLUEPRINT(Items.MAP),
     DETAILS(Items.FLOWER_POT),
-    INTERIOR(Items.RED_BED);
+    INTERIOR(Items.RED_BED),
+    PROJECTIONS(Items.LIGHT_BLUE_STAINED_GLASS);
 
     private final Item icon;
 
